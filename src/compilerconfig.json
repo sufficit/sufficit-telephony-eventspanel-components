@@ -1,0 +1,9 @@
+[
+  {
+    "outputFile": "wwwroot/assets/css/eventspanel.css",
+    "inputFile": "wwwroot/assets/scss/eventspanel.scss",
+    "minify": { "enabled": true },
+    "includeInProject": true,
+    "options": { "sourceMap": false }
+  }
+]

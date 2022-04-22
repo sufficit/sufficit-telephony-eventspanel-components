@@ -1,0 +1,139 @@
+﻿@using Sufficit.Telephony.EventsPanel
+@if (Service != null){    
+    <div class="row">
+        <div class="col-lg-3 col-6 text-center mt-4 mt-lg-0">
+            <div class="border border-light border-1 border-radius-md py-3">
+                <h6 class="text-primary text-gradient mb-0">
+                    @if (Service.IsTrying)
+                        {                                        
+                            <div class="spinner-grow spinner-grow-sm text-primary small" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>                            
+                        } Estado </h6>
+                <div class="h4 font-weight-bolder mb-0"> 
+                    <LinkButton OnClick="Refresh" CssClass="m-0" Size="ComponentSize.Small" Icon="refresh" Text="@Service.State.ToString()">                        
+                    </LinkButton>  
+                </div> 
+                @if(Exception != null)
+                {
+                    <div class="alert alert-danger mb-0 m-3">
+                        @Exception.Message
+                    </div>
+                } 
+            </div>           
+        </div>
+        <div class="col-lg-3 col-6 text-center">
+            <div class="border border-light border-1 border-radius-md py-3">
+                <h6 class="text-primary text-gradient mb-0">Ramais | Extensões</h6>
+                <h4 class="font-weight-bolder mb-0">
+                    <span class="small">$ </span><span>@Peers.Count()</span>
+                    @if (MaxButtons > 0)
+                    {
+                        <span countto="@MaxButtons">/@MaxButtons</span>
+                    }
+                </h4>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6 text-center">
+            <div class="border border-light border-1 border-radius-md py-3">
+                <h6 class="text-primary text-gradient mb-0">Troncos</h6>
+                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span id="state2" countto="2400">@Trunks.Count()</span></h4>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6 text-center mt-4 mt-lg-0">
+            <div class="border border-light border-1 border-radius-md py-3">
+                <h6 class="text-primary text-gradient mb-0">Filas de espera</h6>
+                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span id="state3" countto="48">@Queues.Count()</span></h4>
+            </div>
+        </div>
+    </div>
+    
+    @foreach(var error in Service.Exceptions)
+    {
+        <div class="card p-3">
+            <span>@error.Message</span>          
+        </div>
+    }
+
+    @if (Service.IsConnected)
+    {
+        <div class="events-panel">
+            <div class="row mt-4">
+                <div class="col-12 col-lg-9">
+                    <div class="events-monitor card-extensions">
+                        @foreach (var Item in Peers)
+                        {
+                            <PeerCard Peer=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <div class="events-monitor card-trunks">
+                        @foreach (var Item in Trunks)
+                        {
+                            <PeerCard Peer=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<style>
+    .events-panel .card-trunks > .card {
+        max-width: 300px;         
+    }
+
+    .events-panel .card-trunks {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 300px));   
+    }
+</style>
+<style>
+    .events-panel .card-extensions > .card {
+        max-width: 200px; 
+    }
+
+    .events-panel .card-extensions {        
+        grid-template-columns: repeat(auto-fit, minmax(150px, 200px));        
+    }
+</style>
+<style>
+    .events-panel .events-monitor {
+        justify-content: center;
+        margin-left: auto;
+        display: grid;
+        grid-gap: .3rem;
+    }
+
+    .events-panel .card {
+        min-width: 150px;
+    }
+
+    .events-panel .card[data-state="Unknown"]{
+        opacity: 0.5;
+    }
+
+    .events-panel .card[data-state="Unregistered"]{
+        background: rgb(114 114 114 / 10%);
+    }
+
+    .events-panel .card[data-state="Unmonitored"]{
+        background: rgb(0 150 255 / 10%);
+    }
+
+    .events-panel .card[data-state="Registered"],.events-panel .card[data-state="Ok"]{
+        background: rgb(0 231 82 / 10%);
+    }
+
+    .events-panel .card[data-state="Reachable"]{
+        background: rgb(0 231 82 / 10%);
+    }
+
+    .events-panel .card[data-state="Unreachable"]{
+        background: rgb(255 0 0 / 10%);
+    }
+
+    .events-panel .card[data-status] {
+        background: rgb(255 150 0 / 10%);
+    }
+</style>

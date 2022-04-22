@@ -1,0 +1,40 @@
+﻿@using Sufficit.Telephony.EventsPanel
+@using System.Threading
+<span>@GetTimeSpan()</span>
+
+@code{
+    [Parameter]
+    public ChannelInfoMonitor? Channel { get; set; }
+
+    public string GetTimeSpan()
+    {
+        if (Channel != null)
+        {
+            TimeSpan span = DateTime.Now - Channel.Start;
+            if (Channel.Hangup != null)
+                span = Channel.Hangup.Timestamp - Channel.Start;
+
+            return span.ToString(@"mm\:ss");
+        }
+
+        return string.Empty;
+    }
+
+    protected Timer? aTimer;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (aTimer == null)        
+            aTimer = new Timer(CountDownTimer, null, 1000, 1000);        
+    }
+
+    public async void CountDownTimer(object? state)
+    {
+        if (Channel?.Hangup != null)
+            aTimer?.Dispose();
+
+        await InvokeAsync(StateHasChanged);
+    }
+}
