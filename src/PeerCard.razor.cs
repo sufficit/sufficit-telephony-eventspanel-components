@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Sufficit.Asterisk;
-using Sufficit.Asterisk.Events;
-using Sufficit.Telephony.EventsPanel;
-using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
     public partial class PeerCard
     {
         [Parameter]
-        public EventsPanelCardMonitor? Peer { get; set; }
+        public EventsPanelCardMonitor<PeerInfoMonitor>? Monitor { get; set; }
 
         [Parameter]
         public string? Avatar { get; set; }
@@ -20,16 +16,30 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            if (Peer != null)
+            if (Monitor != null)
             {
-                Peer.Changed += Peer_Changed;
+                Monitor.OnChanged += Changed;
 
-                if(HandleAvatar != null)               
+                if (HandleAvatar != null)               
                     Avatar = await HandleAvatar;                
             }
         }
 
-        private async void Peer_Changed(object? sender, PeerStatus e)
+        protected PeerInfo Content => Monitor?.Content!;
+
+        protected bool IsMonitored => !string.IsNullOrWhiteSpace(((IKey)Content).Key);
+
+        protected string? PeerKey 
+        {
+            get {
+                if(Monitor?.Content != null)                
+                    return $"Peer: { ((IKey)Content).Key }";
+                
+                return null;
+            } 
+        }
+
+        private async void Changed(IMonitor? monitor, object? state)
         {
             await InvokeAsync(StateHasChanged);
         }

@@ -11,7 +11,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public partial class EventsPanel
     {
         [Inject]
-        private EventsPanelService? Service { get; set; }
+        public EventsPanelService? Service { get; internal set; }
 
         [Parameter]
         public IEnumerable<EventsPanelCardMonitor>? Cards
@@ -39,13 +39,17 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (Service != null)
             {
                 Service.OnChanged += Service_OnChanged;
-                Service.Panel.Cards.CollectionChanged += Cards_CollectionChanged;
+                Service.Panel.Cards.OnChanged += CardsOnChanged;
             }
         }
 
-        private async Task Service_OnChanged()
+        private async void Service_OnChanged()
         {
-            await InvokeAsync(StateHasChanged);
+            try
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex) { Exception = ex; }
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -69,9 +73,12 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        private async void Cards_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void CardsOnChanged(IMonitor? monitor, object? state)
         {
-            await InvokeAsync(StateHasChanged);
+            try
+            {
+                await InvokeAsync(StateHasChanged);
+            } catch(Exception ex) { Exception = ex; }
         }
 
         protected async Task Refresh()
@@ -80,19 +87,21 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 await Service.GetPeerStatus();
         }
 
-        protected IEnumerable<EventsPanelCardMonitor> Trunks
-            => Service?.Panel.Cards
-                .Where(s => s.Kind == EventsPanelCardKind.TRUNK) ?? Array.Empty<EventsPanelCardMonitor>();
+        protected bool HasCards() => Service?.Panel.Cards.Any() ?? false;
 
-        protected IEnumerable<EventsPanelCardMonitor> Peers
-            => (Service?.Panel.Cards
-              .Where(s => s.Kind == EventsPanelCardKind.PEER) ?? Array.Empty<EventsPanelCardMonitor>())
-              .OrderBy(s => s.Label);
+        protected IEnumerable<EventsPanelCardMonitor<PeerInfoMonitor>> Trunks
+            => Service?.Panel.Cards.ToList<EventsPanelCardMonitor<PeerInfoMonitor>>()
+                .Where(s => s.Card.Kind == EventsPanelCardKind.TRUNK) ?? Array.Empty<EventsPanelCardMonitor<PeerInfoMonitor>>();
 
-        protected IEnumerable<EventsPanelCardMonitor> Queues
-           => (Service?.Panel.Cards
-             .Where(s => s.Kind == EventsPanelCardKind.QUEUE) ?? Array.Empty<EventsPanelCardMonitor>())
-             .OrderBy(s => s.Label);
+        protected IEnumerable<EventsPanelCardMonitor<PeerInfoMonitor>> Peers
+            => (Service?.Panel.Cards.ToList<EventsPanelCardMonitor<PeerInfoMonitor>>()
+              .Where(s => s.Card.Kind == EventsPanelCardKind.PEER) ?? Array.Empty<EventsPanelCardMonitor<PeerInfoMonitor>>())
+              .OrderBy(s => s.Card.Label);
+
+        protected IEnumerable<EventsPanelCardMonitor<QueueInfoMonitor>> Queues
+           => (Service?.Panel.Cards.ToList<EventsPanelCardMonitor<QueueInfoMonitor>>()
+             .Where(s => s.Card.Kind == EventsPanelCardKind.QUEUE) ?? Array.Empty<EventsPanelCardMonitor<QueueInfoMonitor>>())
+             .OrderBy(s => s.Card.Label);
 
         protected async Task<string> GetAvatar(EventsPanelCardMonitor monitor)
         {

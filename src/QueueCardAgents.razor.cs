@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Sufficit.Asterisk;
+using Sufficit.Asterisk.Events;
 using Sufficit.Telephony.EventsPanel;
 using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class PeerCardChannels
+    public partial class QueueCardAgents
     {
         [Parameter]
-        public ChannelInfoCollection? Channels { get; set; }
+        public GenericCollection<QueueAgentInfo>? Items { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            if (Channels != null)
+            if (Items != null)
             {
-                Channels.OnChanged += Channels_OnChanged;
+                Items.OnChanged += Channels_OnChanged;
             }
         }
 

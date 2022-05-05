@@ -8,20 +8,41 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public partial class PeerCardChannelInfo
     {
         [Parameter]
-        public ChannelInfoMonitor? Channel { get; set; }
+        public ChannelInfoMonitor? Monitor { get; set; }
+
+        protected ChannelInfo Content => Monitor?.GetContent()!;
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
-            if (Channel != null)
+            if (Monitor != null)
             {
-                Channel.Changed += Channel_Changed;
+                Monitor.OnChanged += ChannelOnChanged;
             }
         }
 
-        private async void Channel_Changed(object? sender, AsteriskChannelState e)
+        private async void ChannelOnChanged(IMonitor? sender, object? state) 
+            => await InvokeAsync(StateHasChanged);
+
+        protected string? Animation { get; set; }
+
+        protected string GetIconKey()
         {
-            await InvokeAsync(StateHasChanged);
+            Animation = string.Empty;
+            if(Monitor != null)
+            {
+                switch (Content.State)
+                {
+                    case AsteriskChannelState.Up: return "phone_in_talk";
+                    case AsteriskChannelState.Ringing: return "notifications_active";
+                    case AsteriskChannelState.Ring: return "settings_phone";
+                    case AsteriskChannelState.Down: return "call_end";
+                    case AsteriskChannelState.Dialing: return "dialpad";
+                    case AsteriskChannelState.Busy: return "phone_disabled";
+                    case AsteriskChannelState.Unknown: return "contact_support";
+                }
+            }
+            return "info";
         }
     }
 }

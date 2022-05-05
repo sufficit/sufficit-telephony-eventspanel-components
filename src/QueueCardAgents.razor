@@ -1,0 +1,8 @@
+﻿@using Sufficit.Telephony.EventsPanel
+@if(Items != null) {
+    @foreach(var item in Items) {
+        <div class="card-text w-100">            
+            <small class="text-xxs" data-tooltip="@item.Interface">(@item.Status): @item.Title</small>
+        </div>
+    }
+}

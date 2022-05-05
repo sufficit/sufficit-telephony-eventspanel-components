@@ -1,22 +1,23 @@
 ﻿@using Sufficit.Telephony.EventsPanel
-@if (Service != null){    
+<CascadingValue Value="this">
+@if (Service != null) {    
     <div class="row">
-        <div class="col-lg-3 col-6 text-center mt-4 mt-lg-0">
+        <div class="col-lg-2 col-6 text-center mt-4 mt-lg-0">
             <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">
+                <div class="h6 text-primary text-gradient mb-0">
                     @if (Service.IsTrying)
                         {                                        
                             <div class="spinner-grow spinner-grow-sm text-primary small" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>                            
-                        } Estado </h6>
+                        } Estado </div>
                 <div class="h4 font-weight-bolder mb-0"> 
-                    <LinkButton OnClick="Refresh" CssClass="m-0" Size="ComponentSize.Small" Icon="refresh" Text="@Service.State.ToString()">                        
+                    <LinkButton OnClick="Refresh" CssClass="m-0" Size="ComponentSize.Small" Icon="refresh" Text="@Service?.State?.ToString()">                        
                     </LinkButton>  
                 </div> 
                 @if(Exception != null)
                 {
-                    <div class="alert alert-danger mb-0 m-3">
+                    <div class="alert alert-danger mb-0 m-3 text-white">
                         @Exception.Message
                     </div>
                 } 
@@ -34,16 +35,22 @@
                 </h4>
             </div>
         </div>
-        <div class="col-lg-3 col-6 text-center">
+        <div class="col-lg-2 col-6 text-center">
             <div class="border border-light border-1 border-radius-md py-3">
                 <h6 class="text-primary text-gradient mb-0">Troncos</h6>
-                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span id="state2" countto="2400">@Trunks.Count()</span></h4>
+                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span>@Trunks.Count()</span></h4>
+            </div>
+        </div>
+        <div class="col-lg-2 col-6 text-center mt-4 mt-lg-0">
+            <div class="border border-light border-1 border-radius-md py-3">
+                <h6 class="text-primary text-gradient mb-0">Filas de espera</h6>
+                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span>@Queues.Count()</span></h4>
             </div>
         </div>
         <div class="col-lg-3 col-6 text-center mt-4 mt-lg-0">
             <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">Filas de espera</h6>
-                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span id="state3" countto="48">@Queues.Count()</span></h4>
+                <h6 class="text-primary text-gradient mb-0">Totais</h6>
+                <h4 class="font-weight-bolder mb-0"><span>@Service?.Peers.Count P</span> | <span>@Service?.Queues.Count Q</span> | <span>@Service?.Channels.Count C</span></h4>
             </div>
         </div>
     </div>
@@ -55,15 +62,19 @@
         </div>
     }
 
-    @if (Service.IsConnected)
+    @if (HasCards())
     {
         <div class="events-panel">
             <div class="row mt-4">
                 <div class="col-12 col-lg-9">
                     <div class="events-monitor card-extensions">
+                        @foreach (var Item in Queues)
+                        {
+                            <QueueCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
+                        }
                         @foreach (var Item in Peers)
                         {
-                            <PeerCard Peer=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
+                            <PeerCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
                         }
                     </div>
                 </div>
@@ -71,7 +82,7 @@
                     <div class="events-monitor card-trunks">
                         @foreach (var Item in Trunks)
                         {
-                            <PeerCard Peer=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
+                            <PeerCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
                         }
                     </div>
                 </div>
@@ -79,6 +90,8 @@
         </div>
     }
 }
+</CascadingValue>
+
 <style>
     .events-panel .card-trunks > .card {
         max-width: 300px;         

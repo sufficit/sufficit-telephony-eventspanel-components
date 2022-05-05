@@ -1,18 +1,18 @@
 ﻿@using Sufficit.Blazor.UI.Material.Components
-<div class="row m-0 text-nowrap">
-    <div class="col-2 p-0">
-        <Icon Key="info" Size="Sufficit.Blazor.UI.Material.ComponentSize.Small"></Icon>
+<div class="card-channel row m-0 text-nowrap" data-hangup="@Content.Hangup">
+    <div class="card-channel-actions col-2 p-0" data-hangup="@Content.Hangup" data-tooltip="@Content.State" data-state="@Content.State">
+        <Icon Key="@GetIconKey()" Size="Sufficit.Blazor.UI.Material.ComponentSize.Small"></Icon>
     </div>
-    <div class="col-7 px-1" data-tooltip="@Channel?.Id">
-        <small class="text-xs">@Channel?.State</small>
+    <div class="col-7 px-1" data-tooltip="@Content.Key">
+        <small class="text-xs" data-tooltip="@Content.CallerIDName" data-tooltip-position="bottom center">@Content.CallerIDNum</small>
     </div>
-    @if (@Channel?.Hangup != null && false)
+    @if (@Content.Hangup != null && false)
     {
-        <div class="col-3" data-tooltip="@Channel.Hangup?.Description">
-            @Channel.Hangup?.Code
+        <div class="col-3" data-tooltip="@Content.Hangup?.Description">
+            @Content.Hangup?.Code
         </div>
     }
-    <div class="col-3">            
-        <PeerCardChannelTimespan Channel="@Channel"></PeerCardChannelTimespan>
+    <div class="col-3 text-end">            
+        <PeerCardChannelTimespan Channel="@Content"></PeerCardChannelTimespan>
     </div>
 </div>
