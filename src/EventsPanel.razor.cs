@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Sufficit.Blazor.UI.Material;
 using Sufficit.Telephony.EventsPanel;
 using System;
 using System.Collections.Generic;
@@ -8,111 +9,57 @@ using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class EventsPanel
+    public partial class EventsPanel : EventsPanelView
     {
         [Inject]
-        public EventsPanelService? Service { get; internal set; }
+        public EventsPanelService Service { get; internal set; } = default!;
 
-        [Parameter]
-        public IEnumerable<EventsPanelCardMonitor>? Cards
+        public PaggingControl Pagging { get; }
+
+        public FilteringControl Filtering { get; }
+
+        public EventsPanel()
         {
-            get
-            {
-                return Service?.Panel.Cards;
-            }
-            set
-            {
-                Service?.Panel.Cards.Clear();
-                if (value != null)
-                {
-                    foreach (var monitor in value)
-                        Service?.Panel.Cards.Add(monitor);
-                }
-            }
+            Filtering = new FilteringControl();
+            Pagging = new PaggingControl();
+            Pagging.SetPageSize(20);
         }
 
         protected Exception? Exception { get; set; }
 
-        protected override async Task OnParametersSetAsync()
-        {
-            await base.OnParametersSetAsync();
-            if (Service != null)
-            {
-                Service.OnChanged += Service_OnChanged;
-                Service.Panel.Cards.OnChanged += CardsOnChanged;
-            }
-        }
-
-        private async void Service_OnChanged()
-        {
-            try
-            {
-                await InvokeAsync(StateHasChanged);
-            }
-            catch (Exception ex) { Exception = ex; }
-        }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (firstRender && Service != null && Service.IsConfigured)
+            if (firstRender)
             {
-                try
-                {
-                    if (Service != null)
-                        await Service.StartAsync(System.Threading.CancellationToken.None);
+                Pagging.OnPaggingChanged += (_) => ShouldRefresh();
+                Service.Panel.Cards.OnChanged += (_, _) => ShouldRefresh();
 
-                    Exception = null;
-                }
-                catch (Exception ex)
+                if (Service != null && Service.IsConfigured)
                 {
-                    Exception = ex;
-                }
+                    Service.OnChanged += Service_OnChanged;
+                    try
+                    {
+                        if (Service != null)
+                            await Service.StartAsync(System.Threading.CancellationToken.None);
 
-                await InvokeAsync(StateHasChanged);
+                        Exception = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        Exception = ex;
+                    }
+
+                    await InvokeAsync(StateHasChanged);
+                }
             }
         }
 
-        private async void CardsOnChanged(IMonitor? monitor, object? state)
+        private async void Service_OnChanged(IMonitor? sender, object? state)
         {
-            try
-            {
-                await InvokeAsync(StateHasChanged);
-            } catch(Exception ex) { Exception = ex; }
+            await InvokeAsync(StateHasChanged);
         }
 
-        protected async Task Refresh()
-        {
-            if(Service != null && Service.IsConnected)
-                await Service.GetPeerStatus();
-        }
-
-        protected bool HasCards() => Service?.Panel.Cards.Any() ?? false;
-
-        protected IEnumerable<EventsPanelCardMonitor<PeerInfoMonitor>> Trunks
-            => Service?.Panel.Cards.ToList<EventsPanelCardMonitor<PeerInfoMonitor>>()
-                .Where(s => s.Card.Kind == EventsPanelCardKind.TRUNK) ?? Array.Empty<EventsPanelCardMonitor<PeerInfoMonitor>>();
-
-        protected IEnumerable<EventsPanelCardMonitor<PeerInfoMonitor>> Peers
-            => (Service?.Panel.Cards.ToList<EventsPanelCardMonitor<PeerInfoMonitor>>()
-              .Where(s => s.Card.Kind == EventsPanelCardKind.PEER) ?? Array.Empty<EventsPanelCardMonitor<PeerInfoMonitor>>())
-              .OrderBy(s => s.Card.Label);
-
-        protected IEnumerable<EventsPanelCardMonitor<QueueInfoMonitor>> Queues
-           => (Service?.Panel.Cards.ToList<EventsPanelCardMonitor<QueueInfoMonitor>>()
-             .Where(s => s.Card.Kind == EventsPanelCardKind.QUEUE) ?? Array.Empty<EventsPanelCardMonitor<QueueInfoMonitor>>())
-             .OrderBy(s => s.Card.Label);
-
-        protected async Task<string> GetAvatar(EventsPanelCardMonitor monitor)
-        {
-            if(Service?.CardAvatarHandler != null)
-            {
-                return await Service.CardAvatarHandler.Invoke(monitor);
-            }
-
-            return string.Empty;
-        }
-
-        protected int MaxButtons => Service?.Options?.MaxButtons ?? 0;
+        protected bool HasCards() => Service?.Panel.Cards.Any() ?? false;              
     }
 }

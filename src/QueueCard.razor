@@ -1,33 +1,34 @@
-﻿@if(Monitor != null) {
-    <div class="card px-1" data-kind="queue"  data-status="@Monitor?.Channels.Any()"> 
-        <div class="card-header p-0 bg-transparent">
-            <div class="row m-0 text-nowrap">
-                <div class="col-2">
-                    <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
-                </div>
-                <div class="col-8 px-1" style="line-height: 2rem;">
-                    <small class="text-xs">@Content.Key :: (@Content.Calls)</small>
-                </div>
-                <a class="col-2 text-end cursor-pointer" style="line-height: 2rem;" @onclick="OnRefreshClicked">                    
-                    <i class="material-icons text-primary text-sm">
-                        refresh
-                    </i>                        
-                </a>
+﻿@inherits EventsPanelCardAbstract
+<div class="card px-1 pb-1" data-kind="queue" data-status="@Card.Channels.Any()" data-monitor="@Card.IsMonitored"> 
+    <div class="card-header p-0 bg-transparent">
+        <div class="row m-0 text-nowrap">
+            <div class="col-2">
+                <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
             </div>
+            <div class="col-8 px-1" style="line-height: 2rem;">
+                <small class="text-xs">@Content?.Key :: (@Content?.Calls) | (@Card.Monitor?.Count)</small>
+            </div>
+            <a class="col-2 text-end cursor-pointer" style="line-height: 2rem;" @onclick="OnRefreshClicked">                    
+                <i class="material-icons text-primary text-sm">
+                    refresh
+                </i>                        
+            </a>
         </div>
-        @if (@Content.Agents.Any())
-        {
+    </div>
+    @if (@Card.IsMonitored)
+    {
+        <CascadingValue Value="this">
             <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
             <div class="card-body d-flex flex-column align-items-center p-0"> 
                 <QueueCardAgents Items=@Content?.Agents></QueueCardAgents>
             </div>
-        }
-        @if (Monitor != null && Monitor.Channels.Any())
-        {
-            <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
-            <div class="card-body d-flex flex-column align-items-center p-0">    
-                <PeerCardChannels Channels=@Monitor?.Channels></PeerCardChannels>
-            </div>
-        }
-    </div>
-}
+        </CascadingValue>
+    }
+    @if (Card.Channels.Any())
+    {
+        <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
+        <div class="card-body d-flex flex-column align-items-center p-0">    
+            <PeerCardChannels Channels=@Card.Channels></PeerCardChannels>
+        </div>
+    }
+</div>

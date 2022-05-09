@@ -28,11 +28,11 @@
             aTimer = new Timer(CountDownTimer, null, 1000, 1000);        
     }
 
-    public void CountDownTimer(object? state)
+    public async void CountDownTimer(object? state)
     {
         if (Channel?.Hangup != null)
             aTimer?.Dispose();
 
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 }

@@ -1,0 +1,36 @@
+﻿@using Sufficit.Blazor.UI.Material.Components
+@using Sufficit.Telephony.EventsPanel.Components
+<div class="row mt-2">
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="d-flex align-items-center position-relative">
+        <div class="h3 mb-1">
+            <Select>
+                <Option label=50></Option>
+                <Option label=100></Option>
+                <Option label=200></Option>
+            </Select>
+        </div>
+        <p class="opacity-8 mb-1 ms-3">Itens por página</p>
+        <hr class="vertical light mt-0">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="d-flex align-items-center position-relative">
+        <h3 class="text-white mb-1 ms-lg-auto ms-0">2.4<small class="align-top text-sm">Km</small></h3>
+        <p class="text-white opacity-8 mb-1 ms-3 me-auto">Turn right in 2.4 miles</p>
+        <hr class="vertical light mt-0">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12 ms-lg-auto">
+        <div class="d-flex align-items-center">
+        <h3 class="text-white mb-1 ms-lg-auto">6.3<small class="align-top text-sm">Km</small></h3>
+        <p class="text-white opacity-8 mb-1 ms-3">Distance to Creative Tim</p>
+        </div>
+    </div>
+</div>
+@code {
+    [CascadingParameter]
+    public EventsPanel Panel { get; set; } = default!;
+
+
+}

@@ -1,8 +1,17 @@
 ﻿@using Sufficit.Telephony.EventsPanel
 @if(Items != null) {
     @foreach(var item in Items) {
-        <div class="card-text w-100">            
-            <small class="text-xxs" data-tooltip="@item.Interface">(@item.Status): @item.Title</small>
+        <div class="row px-1 m-0 text-nowrap w-100 text-sm" data-kind="member" data-status="@item.Status.ToString().ToLowerInvariant()">
+            <div class="col-1 m-0 p-0">
+                <a class="cursor-pointer" data-tooltip="@item.Status">                   
+                    <Icon Key="@GetIconKey(item)" CssClass="align-middle" Animation="@GetAnimations(item)"></Icon>                    
+                </a>
+            </div>
+            <div class="col-11 px-1">
+                <a class="cursor-pointer" data-tooltip="@item.Interface">
+                    <small class="text-xss d-block text-truncate">@item.Name</small>
+                </a>
+            </div>
         </div>
     }
 }

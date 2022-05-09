@@ -33,13 +33,13 @@ namespace Sufficit.Telephony.EventsPanel.Components
             {
                 switch (Content.State)
                 {
-                    case AsteriskChannelState.Up: return "phone_in_talk";
-                    case AsteriskChannelState.Ringing: return "notifications_active";
-                    case AsteriskChannelState.Ring: return "settings_phone";
-                    case AsteriskChannelState.Down: return "call_end";
-                    case AsteriskChannelState.Dialing: return "dialpad";
-                    case AsteriskChannelState.Busy: return "phone_disabled";
-                    case AsteriskChannelState.Unknown: return "contact_support";
+                    case AsteriskChannelState.Up: return EventsPanelDefaults.ICON_STATE_UP;
+                    case AsteriskChannelState.Ringing: return EventsPanelDefaults.ICON_STATE_RINGING;
+                    case AsteriskChannelState.Ring: return EventsPanelDefaults.ICON_STATE_RING;
+                    case AsteriskChannelState.Down: return EventsPanelDefaults.ICON_STATE_DOWN;
+                    case AsteriskChannelState.Dialing: return EventsPanelDefaults.ICON_STATE_DIALING;
+                    case AsteriskChannelState.Busy: return EventsPanelDefaults.ICON_STATE_BUSY;
+                    case AsteriskChannelState.Unknown: return EventsPanelDefaults.ICON_STATE_UNKNOWN;
                 }
             }
             return "info";

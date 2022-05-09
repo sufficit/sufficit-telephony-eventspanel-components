@@ -9,58 +9,29 @@ using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class QueueCard
+    public partial class QueueCard : EventsPanelCardAbstract
     {
-        [Parameter]
-        public EventsPanelCardMonitor<QueueInfoMonitor>? Monitor { get; set; }
+        public new EventsPanelQueueCard Card { get => (EventsPanelQueueCard)base.Card; set => base.Card = value; }
 
-        [Parameter]
-        public string? Avatar { get; set; }
+        [Inject]
+        public EventsPanelService Service { get; internal set; } = default!;
 
-        [Parameter]
-        public Task<string>? HandleAvatar { get; set; }
+        protected QueueInfo? Content => Card.Monitor?.Content;
 
-        [CascadingParameter]
-        public EventsPanel? Panel { get; set; }
-
-        protected override async Task OnParametersSetAsync()
+        protected override void CardChanged(IMonitor? monitor, object? state)
         {
-            await base.OnParametersSetAsync();
-            if (Monitor != null)
+            if (state is QueueCallerLeaveEvent leave)
             {
-                Monitor.OnChanged += Changed;
-
-                if(HandleAvatar != null)               
-                    Avatar = await HandleAvatar;                
-            }
-        }
-
-        protected QueueInfo Content => Monitor?.Content!;
-
-        private async void Changed(IMonitor? monitor, object? state)
-        {            
-            if(state is QueueCallerLeaveEvent leave)
-            {                              
-                Monitor?.Channels.Remove(leave.Channel);                
+                Card.Channels.Remove(leave.Channel);
             }
 
-            await InvokeAsync(StateHasChanged);
-        }
-
-        protected string GetAvatarSrc()
-        {
-            if (!string.IsNullOrWhiteSpace(Avatar))
-                return Avatar;
-
-            return $"/_content/{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/assets/img/siluet.png";
+            base.CardChanged(monitor, state);
         }
 
         protected async Task OnRefreshClicked(MouseEventArgs _)
-        {
-            if(Panel != null && Panel.Service != null)
-            {
-                await Panel.Service.GetQueueStatus(Content.Key, string.Empty);
-            } else { Console.WriteLine("problem on send action"); }
+        {            
+            if(Content != null)
+                await Service.GetQueueStatus(Content.Key, string.Empty);           
         }
     }
 }

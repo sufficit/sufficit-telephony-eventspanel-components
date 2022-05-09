@@ -1,0 +1,30 @@
+﻿<div class="row mt-2">
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="d-flex align-items-center position-relative">
+        <div class="mb-1">
+            <Select @ref=PaggingSelect style="border: none;">
+                <!--<Option Value=0 Label="Ilimitado"></Option>-->
+                <Option Label=20 Default="true"></Option>
+                <Option Label=50></Option>
+                <Option Label=100></Option>
+                <Option Label=200></Option>
+            </Select>
+        </div>
+        <p class="opacity-8 mb-1 ms-3">Itens por página</p>
+        <hr class="vertical light mt-0">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12" disabled>        
+        <DataPagging Monitor="@Pagging"></DataPagging>
+    </div>
+    <div class="col-lg-4 col-md-6 col-12 ms-lg-auto text-center">
+        <div class="d-flex align-items-center position-relative">
+        <p class="opacity-8 mb-1 ms-3 me-auto">
+            Exibindo <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging.PageStart +1)</span> até <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging.GetPageEnd())</span>
+            <span> de </span><span class="h6 mb-1 ms-lg-auto ms-0">@Pagging.PageTotalItems</span>            
+            Resultados
+        </p>
+        <hr class="vertical light mt-0">
+        </div>
+    </div>
+</div>

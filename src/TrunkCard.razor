@@ -11,7 +11,7 @@
             <div class="col-3 text-end" style="line-height: 2rem;">
                 @if (@Card.IsMonitored)
                 {
-                    <a class="cursor-pointer" role="button" data-tooltip-inverted data-tooltip="@PeerKey">
+                    <a class="cursor-pointer" role="button" data-tooltip-inverted data-tooltip-position="left center" data-tooltip="@PeerKey">
                         <i class="material-icons text-primary text-sm">visibility</i>
                     </a>
                 }
@@ -22,13 +22,9 @@
                         </i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end ms-n5 px-2 py-3" aria-labelledby="dropdownTable">
-                        @if (!string.IsNullOrWhiteSpace(Card.Key))
-                        {
-                            <li><span class="dropdown-item border-radius-md">@Card.Key</span></li>
-                        }
                         @if (!string.IsNullOrWhiteSpace(((IKey)Content)?.Key))
                         {
-                            <li><span class="dropdown-item border-radius-md">@(((IKey)Content)?.Key)</span></li>
+                            <li><span class="dropdown-item border-radius-md">@((IKey)Content)?.Key</span></li>
                         }
                         @if (!string.IsNullOrWhiteSpace(@Content?.Address))
                         {

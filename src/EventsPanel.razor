@@ -1,106 +1,28 @@
-﻿@using Sufficit.Telephony.EventsPanel
-<CascadingValue Value="this">
-@if (Service != null) {    
-    <div class="row">
-        <div class="col-lg-2 col-6 text-center mt-4 mt-lg-0">
-            <div class="border border-light border-1 border-radius-md py-3">
-                <div class="h6 text-primary text-gradient mb-0">
-                    @if (Service.IsTrying)
-                        {                                        
-                            <div class="spinner-grow spinner-grow-sm text-primary small" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>                            
-                        } Estado </div>
-                <div class="h4 font-weight-bolder mb-0"> 
-                    <LinkButton OnClick="Refresh" CssClass="m-0" Size="ComponentSize.Small" Icon="refresh" Text="@Service?.State?.ToString()">                        
-                    </LinkButton>  
-                </div> 
-                @if(Exception != null)
-                {
-                    <div class="alert alert-danger mb-0 m-3 text-white">
-                        @Exception.Message
-                    </div>
-                } 
-            </div>           
-        </div>
-        <div class="col-lg-3 col-6 text-center">
-            <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">Ramais | Extensões</h6>
-                <h4 class="font-weight-bolder mb-0">
-                    <span class="small">$ </span><span>@Peers.Count()</span>
-                    @if (MaxButtons > 0)
-                    {
-                        <span countto="@MaxButtons">/@MaxButtons</span>
-                    }
-                </h4>
+﻿@inherits EventsPanelView
+@using Sufficit.Telephony.EventsPanel
+<CascadingValue Value="Service.Panel">
+    <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Service.Panel.Options?.RefreshRate">
+        @if(Exception != null)
+        {
+            <div class="alert alert-danger mb-0 m-3 text-white">
+                @Exception.Message
             </div>
-        </div>
-        <div class="col-lg-2 col-6 text-center">
-            <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">Troncos</h6>
-                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span>@Trunks.Count()</span></h4>
+        } 
+        <EventsPanelStats Filtering="Filtering"></EventsPanelStats>        
+        @foreach(var error in Service.Exceptions)
+        {
+            <div class="card p-3">
+                <span>@error.Message</span>          
             </div>
-        </div>
-        <div class="col-lg-2 col-6 text-center mt-4 mt-lg-0">
-            <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">Filas de espera</h6>
-                <h4 class="font-weight-bolder mb-0"><span class="small">$ </span><span>@Queues.Count()</span></h4>
-            </div>
-        </div>
-        <div class="col-lg-3 col-6 text-center mt-4 mt-lg-0">
-            <div class="border border-light border-1 border-radius-md py-3">
-                <h6 class="text-primary text-gradient mb-0">Totais</h6>
-                <h4 class="font-weight-bolder mb-0"><span>@Service?.Peers.Count P</span> | <span>@Service?.Queues.Count Q</span> | <span>@Service?.Channels.Count C</span></h4>
-            </div>
-        </div>
-    </div>
-    
-    @foreach(var error in Service.Exceptions)
-    {
-        <div class="card p-3">
-            <span>@error.Message</span>          
-        </div>
-    }
+        }
 
-    @if (HasCards())
-    {
-        <div class="events-panel">
-            <div class="row mt-4">
-                <div class="col-12 col-lg-9">
-                    <div class="events-monitor card-extensions">
-                        @foreach (var Item in Queues)
-                        {
-                            <QueueCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
-                        }
-                        @foreach (var Item in Peers)
-                        {
-                            <PeerCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
-                        }
-                    </div>
-                </div>
-                <div class="col-12 col-lg-3">
-                    <div class="events-monitor card-trunks">
-                        @foreach (var Item in Trunks)
-                        {
-                            <PeerCard Monitor=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-}
+        @if (HasCards())
+        {
+            <EventsPanelCardArea Cards="Service.Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
+        }
+    </EventsPanelViewRefresh>
 </CascadingValue>
 
-<style>
-    .events-panel .card-trunks > .card {
-        max-width: 300px;         
-    }
-
-    .events-panel .card-trunks {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 300px));   
-    }
-</style>
 <style>
     .events-panel .card-extensions > .card {
         max-width: 200px; 

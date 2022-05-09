@@ -1,0 +1,30 @@
+﻿<CascadingValue Value="this">@ChildContent</CascadingValue>
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public uint? RefreshRate { get; set; }
+
+    protected Timer? aTimer;
+
+    public bool IsSincronous => aTimer != null;
+
+    public event Action? Refresh;
+
+    protected void ViewRefreshElapsed(object? state = default)
+    {
+        Refresh?.Invoke();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        // Applying refresh rate
+        if (firstRender && RefreshRate > 0)
+        {
+            aTimer = new Timer(ViewRefreshElapsed, null, 1000, (int)RefreshRate);
+        }
+    }
+}
