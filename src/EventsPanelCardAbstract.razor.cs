@@ -16,9 +16,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected override async Task OnParametersSetAsync()
         {
-            await base.OnParametersSetAsync();
-            
-            Card.OnChanged += CardChanged;
+            await base.OnParametersSetAsync();            
             if (Card.IsMonitored)
             {
                 Card.Monitor!.OnChanged += MonitorChanged;
@@ -26,18 +24,8 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
             Card.Channels.OnChanged += ChannelsChanged;
 
-            if (HandleAvatar != null)               
-                Avatar = await HandleAvatar;  
-        }
-
-        /// <summary>
-        /// On Card has changed
-        /// </summary>
-        /// <param name="monitor"></param>
-        /// <param name="state"></param>
-        protected virtual async void CardChanged(IMonitor? monitor, object? state)
-        {
-            await InvokeAsync(StateHasChanged);
+            if (HandleAvatar != null)
+                Avatar = await HandleAvatar;            
         }
 
         /// <summary>
@@ -51,7 +39,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
         }
 
         /// <summary>
-        /// On Undelaying Monitor Changed
+        /// On Underlaying Monitor Changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="state"></param>

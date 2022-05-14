@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.SignalR.Client;
 using Sufficit.Asterisk;
 using Sufficit.Asterisk.Events;
 using Sufficit.Asterisk.Manager.Events;
@@ -18,20 +19,41 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected QueueInfo? Content => Card.Monitor?.Content;
 
-        protected override void CardChanged(IMonitor? monitor, object? state)
+        protected override void ChannelsChanged(IMonitor? monitor, object? state)
         {
             if (state is QueueCallerLeaveEvent leave)
             {
                 Card.Channels.Remove(leave.Channel);
             }
 
-            base.CardChanged(monitor, state);
+            base.ChannelsChanged(monitor, state);
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            Service.OnChanged += ServiceChanged;
+        }
+
+        private async void ServiceChanged(HubConnectionState? state, Exception? ex)
+        {
+            if(state.HasValue && state.Value == HubConnectionState.Connected)            
+                await RequestStatusEvents();            
         }
 
         protected async Task OnRefreshClicked(MouseEventArgs _)
-        {            
-            if(Content != null)
-                await Service.GetQueueStatus(Content.Key, string.Empty);           
+            => await RequestStatusEvents();
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (firstRender) await RequestStatusEvents();            
+        }
+
+        protected async Task RequestStatusEvents()
+        {
+            if (Content != null && Service.IsConnected)
+                await Service.GetQueueStatus(Content.Key, string.Empty);
         }
     }
 }

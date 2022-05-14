@@ -18,14 +18,15 @@
                 </div>
             </div>
             <div class="col-12 col-lg-3">
-                @if(Panel.Options.ShowTrunks){
+                @if(Panel.Options.ShowTrunks) 
+                {
                     <div class="events-monitor card-trunks">
                         @foreach (var Item in GetTrunks())
                         {
                             <TrunkCard Card=@Item HandleAvatar="@GetAvatar(Item)"></TrunkCard>
                         }
                     </div>
-                    <hr />
+                    <hr class="horizontal dark" />
                 }
                 <div class="events-monitor card-queues">
                     @foreach (var Item in GetQueues())

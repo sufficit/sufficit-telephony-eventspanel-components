@@ -27,14 +27,17 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public FilteringControl? Filtering { get; set; }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            Cards.OnChanged += (_) => ShouldRefresh();
+        }
+
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnAfterRender(firstRender);
             if (firstRender)
             {
-                // Delaying changes on cards groups
-                Cards.OnChanged += (_,_) => ShouldRefresh();
-
                 // Imediately apply visual changes
                 Pagging.OnPaggingChanged += (_) => StateHasChanged();
                 

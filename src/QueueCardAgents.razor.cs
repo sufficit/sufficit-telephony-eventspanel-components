@@ -10,7 +10,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public partial class QueueCardAgents
     {
         [Parameter]
-        public GenericCollection<QueueAgentInfo>? Items { get; set; }
+        public MonitorCollection<QueueAgentInfo>? Items { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {

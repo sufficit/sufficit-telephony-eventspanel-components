@@ -18,20 +18,18 @@ namespace Sufficit.Telephony.EventsPanel.Components
         public FilteringControl? Filtering { get; set; }
 
         protected Exception? Exception { get; set; }
-
+        
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnAfterRender(firstRender);
             if (firstRender)
             {
-                Service.OnChanged += Changed;
-                Service.Channels.OnChanged += Changed;
-            }
-        }
+                Service.OnChanged += (_, _) => ShouldRefresh();
+                Service.Channels.OnChanged += (_, _) => ShouldRefresh();
 
-        private void Changed(IMonitor? sender, object? state)
-        {
-            ShouldRefresh();
+                if (Filtering != null)                
+                    Filtering.OnFilterChanged += (_) => ShouldRefresh();                
+            }
         }
 
         protected async Task Refresh()

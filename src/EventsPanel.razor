@@ -15,11 +15,8 @@
                 <span>@error.Message</span>          
             </div>
         }
-
-        @if (HasCards())
-        {
-            <EventsPanelCardArea Cards="Service.Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
-        }
+        <hr class="horizontal mt-2 m-0 dark" />
+        <EventsPanelCardArea Cards="Service.Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
     </EventsPanelViewRefresh>
 </CascadingValue>
 

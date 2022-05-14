@@ -6,7 +6,7 @@
                 <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
             </div>
             <div class="col-7 px-1" style="line-height: 2rem;">
-                <small class="text-xs">@Card.Label</small>
+                <small class="text-xxs d-block text-truncate">@Card.Label</small>
             </div>
             <div class="col-3 text-end" style="line-height: 2rem;">
                 @if (@Card.IsMonitored)
@@ -22,10 +22,6 @@
                         </i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end ms-n5 px-2 py-3" aria-labelledby="dropdownTable">
-                        @if (!string.IsNullOrWhiteSpace(Card.Key))
-                        {
-                            <li><span class="dropdown-item border-radius-md">@Card.Key</span></li>
-                        }
                         @if (!string.IsNullOrWhiteSpace(((IKey)Content)?.Key))
                         {
                             <li><span class="dropdown-item border-radius-md">@(((IKey)Content)?.Key)</span></li>

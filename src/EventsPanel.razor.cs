@@ -16,11 +16,21 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         public PaggingControl Pagging { get; }
 
-        public FilteringControl Filtering { get; }
+        public FilteringControl? Filtering { get; internal set; }
+
+        [CascadingParameter]
+        public TextSearchControl? TextSearch { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            
+            if(TextSearch != null)
+                Filtering = new FilteringControl(TextSearch);
+        }
 
         public EventsPanel()
         {
-            Filtering = new FilteringControl();
             Pagging = new PaggingControl();
             Pagging.SetPageSize(20);
         }
@@ -33,11 +43,10 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (firstRender)
             {
                 Pagging.OnPaggingChanged += (_) => ShouldRefresh();
-                Service.Panel.Cards.OnChanged += (_, _) => ShouldRefresh();
 
-                if (Service != null && Service.IsConfigured)
+                if (Service.IsConfigured)
                 {
-                    Service.OnChanged += Service_OnChanged;
+                    Service.OnChanged += (_, _) => ShouldRefresh();
                     try
                     {
                         if (Service != null)
@@ -55,11 +64,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        private async void Service_OnChanged(IMonitor? sender, object? state)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-
-        protected bool HasCards() => Service?.Panel.Cards.Any() ?? false;              
+        protected bool HasCards() => Service.Panel.Cards.Any();              
     }
 }

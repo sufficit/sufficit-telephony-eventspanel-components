@@ -6,7 +6,13 @@
                 <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
             </div>
             <div class="col-8 px-1" style="line-height: 2rem;">
-                <small class="text-xs">@Content?.Key :: (@Content?.Calls) | (@Card.Monitor?.Count)</small>
+                @if (Card.IsMonitored)
+                {
+                    <small class="text-xs" data-tooltip="@Content!.Key">@Card.Label :: (@Content!.Calls) | (@Card.Monitor!.Count)</small>
+                } else
+                {
+                    <small class="text-xs">@Card.Label</small>
+                }
             </div>
             <a class="col-2 text-end cursor-pointer" style="line-height: 2rem;" @onclick="OnRefreshClicked">                    
                 <i class="material-icons text-primary text-sm">
@@ -15,12 +21,12 @@
             </a>
         </div>
     </div>
-    @if (@Card.IsMonitored)
+    @if (Card.IsMonitored && Card.Content!.Agents.Any())
     {
         <CascadingValue Value="this">
             <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
             <div class="card-body d-flex flex-column align-items-center p-0"> 
-                <QueueCardAgents Items=@Content?.Agents></QueueCardAgents>
+                <QueueCardAgents Items=@Content!.Agents></QueueCardAgents>
             </div>
         </CascadingValue>
     }
