@@ -13,7 +13,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
         {
             get {
                 if(Content != null)                
-                    return $"Peer: { ((IKey)Content).Key }";
+                    return ((IKey)Content).Key;
                 
                 return null;
             } 

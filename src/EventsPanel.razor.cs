@@ -11,6 +11,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
 {
     public partial class EventsPanel : EventsPanelView
     {
+        [Parameter]
+        public Panel Panel { get; set; } = default!;
+
         [Inject]
         public EventsPanelService Service { get; internal set; } = default!;
 
@@ -24,13 +27,17 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            
-            if(TextSearch != null)
+
+            if (Panel == null)
+                Panel = Service.Panel;
+
+            if (TextSearch != null)
                 Filtering = new FilteringControl(TextSearch);
         }
 
         public EventsPanel()
         {
+            Filtering = new FilteringControl();
             Pagging = new PaggingControl();
             Pagging.SetPageSize(20);
         }
@@ -42,7 +49,11 @@ namespace Sufficit.Telephony.EventsPanel.Components
             await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
+                // Listening pagging changes
                 Pagging.OnPaggingChanged += (_) => ShouldRefresh();
+
+                // Listening panel options changes
+                Panel.OnChanged += (_) => ShouldRefresh();
 
                 if (Service.IsConfigured)
                 {
@@ -64,6 +75,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        protected bool HasCards() => Service.Panel.Cards.Any();              
+        protected bool HasCards() => Panel.Cards.Any();              
     }
 }

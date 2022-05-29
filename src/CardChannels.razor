@@ -1,0 +1,9 @@
+﻿@if(Channels != null){
+    <CascadingValue Value="@Kind">
+        @foreach(var Channel in @Channels) {
+            <div class="card-text w-100">
+                <CardChannelInfo Monitor="@Channel"></CardChannelInfo>
+            </div>
+        }
+    </CascadingValue>
+}

@@ -31,7 +31,7 @@
                 <div class="events-monitor card-queues">
                     @foreach (var Item in GetQueues())
                     {
-                        <QueueCard Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
+                        <QueueCard CanToggle="@(QueuesTotal > 3)" Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
                     }
                 </div>
             </div>

@@ -2,42 +2,22 @@
 <div class="card px-1" data-state="@(Card.IsMonitored ? Content?.Status : null)" data-status="@Card.Channels.Any()"> 
     <div class="card-header p-0 bg-transparent">
         <div class="row m-0 text-nowrap">
-            <div class="col-2">
-                <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
+            <div class="col-2 px-1" data-tooltip="@PeerKey" style="line-height: 2rem;">
+                <img src="@GetAvatarSrc()" class="avatar avatar-xs">
             </div>
-            <div class="col-7 px-1" style="line-height: 2rem;">
-                <small class="text-xs">@Card.Label</small>
+            <div class="col-9 pe-1" style="line-height: 2rem;">     
+                <small class="text-xs text-truncate">
+                    <span>@Card.Label</span>
+                </small>
+                <span data-tooltip="Canais Ativos" class="text-xs cursor-pointer"> :: @Card.Channels.Count</span>
             </div>
-            <div class="col-3 text-end" style="line-height: 2rem;">
-                @if (@Card.IsMonitored)
-                {
-                    <a class="cursor-pointer" role="button" data-tooltip-inverted data-tooltip-position="left center" data-tooltip="@PeerKey">
-                        <i class="material-icons text-primary text-sm">visibility</i>
+            <div class="col-1 p-0 pe-1 text-end" style="line-height: 2rem;">
+                @if (@Card.IsMonitored && @Content?.Address != null)
+                {                
+                    <a class="cursor-pointer pe-1" role="button" data-tooltip-inverted data-tooltip="@Content?.Status">
+                        <i class="material-icons text-primary text-sm align-middle">visibility</i>
                     </a>
                 }
-                <div class="dropdown d-inline" data-tooltip="@Content?.Status">
-                    <a class="cursor-pointer" href="javascript:;" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-                        <i class="material-icons text-primary text-sm">
-                            settings
-                        </i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end ms-n5 px-2 py-3" aria-labelledby="dropdownTable">
-                        @if (!string.IsNullOrWhiteSpace(((IKey)Content)?.Key))
-                        {
-                            <li><span class="dropdown-item border-radius-md">@((IKey)Content)?.Key</span></li>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(@Content?.Address))
-                        {
-                            <li><span class="dropdown-item border-radius-md">@Content?.Address</span></li>
-                        }
-                        @if (@Content?.Cause != Asterisk.PeerUnreachableCause.Unknown)
-                        {
-                            <li><span class="dropdown-item border-radius-md">@Content?.Cause</span></li>
-                        }
-                        <li><hr /></li>
-                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Actions</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -45,7 +25,7 @@
     {
         <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
         <div class="card-body d-flex flex-column align-items-center p-0">    
-            <PeerCardChannels Channels=@Card.Channels></PeerCardChannels>
+            <CardChannels Channels="@Card.Channels" Kind="@EventsPanelCardKind.TRUNK"></CardChannels>
         </div>
     }
 </div>

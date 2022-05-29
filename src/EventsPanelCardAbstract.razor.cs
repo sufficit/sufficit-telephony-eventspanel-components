@@ -33,7 +33,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="state"></param>
-        protected virtual async void ChannelsChanged(IMonitor? sender, object? state)
+        protected virtual async void ChannelsChanged(ChannelInfoMonitor? sender, object? state)
         {
             await InvokeAsync(StateHasChanged);
         }

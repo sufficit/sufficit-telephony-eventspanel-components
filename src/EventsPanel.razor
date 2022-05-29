@@ -1,7 +1,7 @@
 ﻿@inherits EventsPanelView
 @using Sufficit.Telephony.EventsPanel
-<CascadingValue Value="Service.Panel">
-    <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Service.Panel.Options?.RefreshRate">
+<CascadingValue Value="@Panel">
+    <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Panel.Options.RefreshRate">
         @if(Exception != null)
         {
             <div class="alert alert-danger mb-0 m-3 text-white">
@@ -16,56 +16,6 @@
             </div>
         }
         <hr class="horizontal mt-2 m-0 dark" />
-        <EventsPanelCardArea Cards="Service.Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
+        <EventsPanelCardArea Cards="@Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
     </EventsPanelViewRefresh>
 </CascadingValue>
-
-<style>
-    .events-panel .card-extensions > .card {
-        max-width: 200px; 
-    }
-
-    .events-panel .card-extensions {        
-        grid-template-columns: repeat(auto-fit, minmax(150px, 200px));        
-    }
-</style>
-<style>
-    .events-panel .events-monitor {
-        justify-content: center;
-        margin-left: auto;
-        display: grid;
-        grid-gap: .3rem;
-    }
-
-    .events-panel .card {
-        min-width: 150px;
-    }
-
-    .events-panel .card[data-state="Unknown"]{
-        opacity: 0.5;
-    }
-
-    .events-panel .card[data-state="Unregistered"]{
-        background: rgb(114 114 114 / 10%);
-    }
-
-    .events-panel .card[data-state="Unmonitored"]{
-        background: rgb(0 150 255 / 10%);
-    }
-
-    .events-panel .card[data-state="Registered"],.events-panel .card[data-state="Ok"]{
-        background: rgb(0 231 82 / 10%);
-    }
-
-    .events-panel .card[data-state="Reachable"]{
-        background: rgb(0 231 82 / 10%);
-    }
-
-    .events-panel .card[data-state="Unreachable"]{
-        background: rgb(255 0 0 / 10%);
-    }
-
-    .events-panel .card[data-status] {
-        background: rgb(255 150 0 / 10%);
-    }
-</style>

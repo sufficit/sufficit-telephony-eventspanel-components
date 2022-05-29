@@ -72,6 +72,8 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 return peers;            
         }
 
+        protected int QueuesTotal;
+
         protected IEnumerable<EventsPanelQueueCard> GetQueues()
         {
             string? filter = Filtering?.FilterText;
@@ -79,7 +81,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (!string.IsNullOrWhiteSpace(filter))
                 whereClause = (EventsPanelQueueCard s) => s.IsMatchFilter(filter);
 
-            return Cards.Queues.Where(whereClause);
+            var result = Cards.Queues.Where(whereClause);
+            QueuesTotal = result.Count();
+            return result;
         }
 
         protected IEnumerable<EventsPanelTrunkCard> GetTrunks()
@@ -89,7 +93,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (!string.IsNullOrWhiteSpace(filter))
                 whereClause = (EventsPanelTrunkCard s) => s.IsMatchFilter(filter);
 
-            return Cards.Trunks.Where(whereClause);
+            return Cards.Trunks.Where(whereClause).OrderBy(s => s.Info.Order).ThenBy(s => s.Info.Label);
         }
     }
 }

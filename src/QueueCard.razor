@@ -1,31 +1,41 @@
 ﻿@inherits EventsPanelCardAbstract
-<div class="card px-1 pb-1" data-kind="queue" data-status="@Card.Channels.Any()" data-monitor="@Card.IsMonitored"> 
+<div class="card px-1" data-kind="queue" data-status="@Card.Channels.Any()" data-monitor="@Card.IsMonitored"> 
     <div class="card-header p-0 bg-transparent">
         <div class="row m-0 text-nowrap">
-            <div class="col-2">
+            <div class="col-2" data-tooltip="@Content!.Key">
                 <img src="@GetAvatarSrc()" class="avatar avatar-xs p-0 m-1 mx-n2">
             </div>
             <div class="col-8 px-1" style="line-height: 2rem;">
                 @if (Card.IsMonitored)
                 {
-                    <small class="text-xs" data-tooltip="@Content!.Key">@Card.Label :: (@Content!.Calls) | (@Card.Monitor!.Count)</small>
+                    <small class="text-xs">
+                        <span>@Card.Label</span> :: 
+                        <span data-tooltip="Agentes">@Content!.Agents.Count</span> | 
+                        <span data-tooltip="Chamadas em espera">@Content!.Calls</span>
+                    </small>
                 } else
                 {
                     <small class="text-xs">@Card.Label</small>
                 }
             </div>
-            <a class="col-2 text-end cursor-pointer" style="line-height: 2rem;" @onclick="OnRefreshClicked">                    
-                <i class="material-icons text-primary text-sm">
-                    refresh
-                </i>                        
-            </a>
+            <div class="col-2 p-0 text-end">
+                @if (CanToggle)
+                {
+                    <HyperLink CssClass="text-center cursor-pointer pe-1" OnClick="OnToggleClicked">                 
+                        <Icon Key="support_agent" CssClass="align-middle" Size="ComponentSize.Medium" style="line-height: 2rem;"></Icon>   
+                    </HyperLink>
+                }
+                <HyperLink CssClass="text-center cursor-pointer pe-1" OnClick="OnRefreshClicked">                 
+                    <Icon Key="refresh" CssClass="align-middle" Size="ComponentSize.Medium" style="line-height: 2rem;"></Icon>   
+                </HyperLink>
+            </div>
         </div>
     </div>
-    @if (Card.IsMonitored && Card.Content!.Agents.Any())
+    @if (ShowAgents)
     {
         <CascadingValue Value="this">
             <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
-            <div class="card-body d-flex flex-column align-items-center p-0"> 
+            <div class="card-body d-flex flex-column align-items-center p-0 pb-1"> 
                 <QueueCardAgents Items=@Content!.Agents></QueueCardAgents>
             </div>
         </CascadingValue>
@@ -33,8 +43,8 @@
     @if (Card.Channels.Any())
     {
         <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
-        <div class="card-body d-flex flex-column align-items-center p-0">    
-            <PeerCardChannels Channels=@Card.Channels></PeerCardChannels>
+        <div class="card-body d-flex flex-column align-items-center p-0 pb-1">    
+            <CardChannels Channels="@Card.Channels" Kind="EventsPanelCardKind.QUEUE"></CardChannels>
         </div>
     }
 </div>

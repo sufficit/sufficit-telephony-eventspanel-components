@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class PeerCardChannels
+    public partial class CardChannels
     {
+        [Parameter]
+        public EventsPanelCardKind Kind { get; set; }
+
         [Parameter]
         public ChannelInfoCollection? Channels { get; set; }
 

@@ -2,14 +2,14 @@
 @if(Items != null) {
     @foreach(var item in Items) {
         <div class="row px-1 m-0 text-nowrap w-100 text-sm" data-kind="member" data-status="@item.Status.ToString().ToLowerInvariant()">
-            <div class="col-1 m-0 p-0">
+            <div class="col-1 m-0 p-0 text-center">
                 <a class="cursor-pointer" data-tooltip="@item.Status">                   
                     <Icon Key="@GetIconKey(item)" CssClass="align-middle" Animation="@GetAnimations(item)"></Icon>                    
                 </a>
             </div>
             <div class="col-11 px-1">
-                <a class="cursor-pointer" data-tooltip="@item.Interface">
-                    <small class="text-xxs d-block text-truncate">@item.Name</small>
+                <a class="cursor-pointer" data-tooltip="@item.Interface" style="line-height: 2rem;">
+                    <small class="text-xs d-block text-truncate">@item.Name</small>
                 </a>
             </div>
         </div>

@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
-using Sufficit.Asterisk;
-using Sufficit.Asterisk.Events;
 using Sufficit.Asterisk.Manager.Events;
-using Sufficit.Telephony.EventsPanel;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
@@ -17,16 +12,17 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Inject]
         public EventsPanelService Service { get; internal set; } = default!;
 
+        [Parameter]
+        public bool CanToggle { get; set; } = true;
+
         protected QueueInfo? Content => Card.Monitor?.Content;
 
-        protected override void ChannelsChanged(IMonitor? monitor, object? state)
+        protected override void MonitorChanged(IMonitor? monitor, object? state)
         {
-            if (state is QueueCallerLeaveEvent leave)
-            {
-                Card.Channels.Remove(leave.Channel);
-            }
+            if (state is QueueCallerLeaveEvent leave)            
+                Card.Channels.Remove(leave.Channel);            
 
-            base.ChannelsChanged(monitor, state);
+            base.MonitorChanged(monitor, state);
         }
 
         protected override void OnInitialized()
@@ -37,8 +33,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         private async void ServiceChanged(HubConnectionState? state, Exception? ex)
         {
-            if(state.HasValue && state.Value == HubConnectionState.Connected)            
-                await RequestStatusEvents();            
+             if(state.HasValue && state.Value == HubConnectionState.Connected)            
+                if(!CanToggle) // only if has a few queues showing
+                    await RequestStatusEvents();            
         }
 
         protected async Task OnRefreshClicked(MouseEventArgs _)
@@ -47,7 +44,11 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (firstRender) await RequestStatusEvents();            
+            if (firstRender)
+            {
+                if (!CanToggle) // only if has a few queues showing
+                    await RequestStatusEvents();
+            }
         }
 
         protected async Task RequestStatusEvents()
@@ -55,5 +56,18 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (Content != null && Service.IsConnected)
                 await Service.GetQueueStatus(Content.Key, string.Empty);
         }
+
+        protected bool ShowAgents => (!CanToggle || Active) && Card.IsMonitored && Card.Content!.Agents.Any();
+
+        protected bool Active { get; set; }
+
+        public void Toggle()
+        {
+            Active = !Active;
+            StateHasChanged();
+        }
+
+        protected void OnToggleClicked(MouseEventArgs _)
+            => Toggle();
     }
 }

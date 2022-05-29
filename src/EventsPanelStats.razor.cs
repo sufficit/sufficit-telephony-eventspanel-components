@@ -17,18 +17,17 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public FilteringControl? Filtering { get; set; }
 
+        protected bool ShowFilter => Filtering != null && !Filtering.External;
+
         protected Exception? Exception { get; set; }
-        
+
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnAfterRender(firstRender);
             if (firstRender)
             {
                 Service.OnChanged += (_, _) => ShouldRefresh();
-                Service.Channels.OnChanged += (_, _) => ShouldRefresh();
-
-                if (Filtering != null)                
-                    Filtering.OnFilterChanged += (_) => ShouldRefresh();                
+                Service.Channels.OnChanged += (_, _) => ShouldRefresh();                
             }
         }
 
@@ -39,7 +38,5 @@ namespace Sufficit.Telephony.EventsPanel.Components
         }
 
         protected int MaxButtons => Service?.Options?.MaxButtons ?? 0;
-
-        protected void OnFilterChanged(ChangeEventArgs e) => Filtering?.Filter(e.Value?.ToString()!);
     }
 }
