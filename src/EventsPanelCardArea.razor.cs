@@ -16,10 +16,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
         public EventsPanelService Service { get; internal set; } = default!;
 
         [CascadingParameter]
-        public Panel Panel { get; internal set; } = default!;
-
-        [Parameter]
-        public IEventsPanelCardCollection Cards { get; set; } = default!;
+        public Panel Panel { get; internal set; } = default!;        
 
         [Parameter]
         public PaggingControl Pagging { get; set; } = default!;
@@ -27,10 +24,12 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public FilteringControl? Filtering { get; set; }
 
+        public IEventsPanelCardCollection Cards => Panel.Cards;
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            Cards.OnChanged += (_) => ShouldRefresh();
+            Cards.OnChanged += (_, _) => ShouldRefresh();
         }
 
         protected override void OnAfterRender(bool firstRender)

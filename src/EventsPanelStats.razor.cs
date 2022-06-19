@@ -14,6 +14,10 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Inject]
         public EventsPanelService Service { get; internal set; } = default!;
 
+        [CascadingParameter]
+        protected Panel Panel { get; set; } = default!;
+
+
         [Parameter]
         public FilteringControl? Filtering { get; set; }
 
@@ -37,6 +41,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 await Service.GetPeerStatus();
         }
 
-        protected int MaxButtons => Service?.Options?.MaxButtons ?? 0;
+        protected int MaxButtons => Panel.Options?.MaxButtons ?? 0;
     }
 }

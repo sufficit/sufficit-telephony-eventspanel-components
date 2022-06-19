@@ -11,18 +11,19 @@ namespace Sufficit.Telephony.EventsPanel.Components
 {
     public partial class EventsPanel : EventsPanelView
     {
+        [Inject]
+        public EventsPanelService Service { get; internal set; } = default!;
+
         [Parameter]
         public Panel Panel { get; set; } = default!;
 
-        [Inject]
-        public EventsPanelService Service { get; internal set; } = default!;
+        [CascadingParameter]
+        public TextSearchControl? TextSearch { get; set; }
 
         public PaggingControl Pagging { get; }
 
         public FilteringControl? Filtering { get; internal set; }
 
-        [CascadingParameter]
-        public TextSearchControl? TextSearch { get; set; }
 
         protected override void OnParametersSet()
         {
