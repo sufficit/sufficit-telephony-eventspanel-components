@@ -20,21 +20,12 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public uint? Total { get; set; }
 
-        protected Select PaggingSelect { get; set; }  = default!;
-
-        protected override void OnAfterRender(bool firstRender)
-        {
-            base.OnAfterRender(firstRender);
-            if(firstRender)
-                PaggingSelect.OnChanged += PaggingSelect_OnChanged;            
-        }
-
-        private void PaggingSelect_OnChanged(object? sender, SelectedChangedEventArgs<string?> e)
+        private async void PaggingSelectChanged(SelectedChangedEventArgs<string?> e)
         {
             if (uint.TryParse(e.Current, out uint pagesize))
             {
                 PaggingContext.Monitor?.SetPageSize(pagesize);
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged);
             }
         }
 

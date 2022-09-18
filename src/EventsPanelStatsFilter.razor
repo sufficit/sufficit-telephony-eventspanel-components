@@ -12,7 +12,7 @@
         <div class="card-footer p-3">
             @if (Filtering != null)
             {
-                <TextInput CssClass="p-0" placeholder="Texto para filtrar ..." Value="@Filtering?.FilterText" OnChanged="@Filtering!.Filter"></TextInput>
+                <TextInput CssClass="p-0" placeholder="Texto para filtrar ..." Value="@Filtering?.FilterText" OnValueChanged="@Filtering!.Filter"></TextInput>
             } 
             else
             {

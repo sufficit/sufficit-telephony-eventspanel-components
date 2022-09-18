@@ -59,18 +59,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 if (Service.IsConfigured)
                 {
                     Service.OnChanged += (_, _) => ShouldRefresh();
-                    try
-                    {
-                        if (Service != null)
-                            await Service.StartAsync(System.Threading.CancellationToken.None);
-
-                        Exception = null;
-                    }
-                    catch (Exception ex)
-                    {
-                        Exception = ex;
-                    }
-
                     await InvokeAsync(StateHasChanged);
                 }
             }
