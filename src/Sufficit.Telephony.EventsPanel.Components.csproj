@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
-	
+
 	<PropertyGroup Label="Sufficit Versioning">
 		<VersionSuffix>1.$([System.DateTime]::UtcNow.ToString(yy)).$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</VersionSuffix>
 		<AssemblyVersion Condition=" '$(VersionSuffix)' == '' ">1.0.0.0</AssemblyVersion>
@@ -13,6 +13,48 @@
 		<Version Condition=" '$(VersionSuffix)' == '' ">0.0.1.0</Version>
 		<Version Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</Version>
 	</PropertyGroup>
+
+	<PropertyGroup Label="Sufficit Product General">
+		<Company>SUFFICIT SOLUÇÕES EM TECNOLOGIA DA INFORMAÇÃO</Company>
+		<Authors>Hugo Castro de Deco</Authors>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<ProductName>Sufficit Telephony EventsPanel Components</ProductName>
+
+		<!-- Copia todas as dlls de dependencias para o diretório de publicação dos projetos que o utilizam -->
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PreserveCompilationReferences>false</PreserveCompilationReferences>
+
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Sufficit Pacote NUGET">
+		<Name>Sufficit.Telephony.EventsPanel.Components</Name>
+		<PackageId>Sufficit.Telephony.EventsPanel.Components</PackageId>
+		<PackageDescription></PackageDescription>
+		<RepositoryUrl>https://github.com/sufficit/sufficit-telephony-eventspanel-components</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/sufficit/sufficit-telephony-eventspanel-components</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/sufficit/sufficit-telephony-eventspanel-components/main/icon.ico</PackageIconUrl>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+		<PackageLicenseFile>license</PackageLicenseFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup Label="Sufficit Pacote NUGET Itens">
+		<None Include="../icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="../license">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="../readme.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 	
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
@@ -27,18 +69,26 @@
     <ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="BuildWebCompiler" Version="1.12.405" />
-	    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.6" />
-	    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.6" />
+	    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.10" />
+	    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
 	    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="wwwroot\assets\css\" />
     </ItemGroup>
+	
+	<ItemGroup Label="Sufficit Dependencies Fixed">
+		<PackageReference Include="Sufficit.Blazor.UI.Material" Version="1.22.*" />
+	</ItemGroup>
+	
+	<ItemGroup Label="Sufficit Dependencies on Packing" Condition=" '$(Configuration)' == 'Packing' ">
+		<PackageReference Include="Sufficit.Asterisk.Core" Version="1.22.*" />
+		<PackageReference Include="Sufficit.Telephony.EventsPanel" Version="1.22.*" />
+	</ItemGroup>
 
-    <ItemGroup>
+	<ItemGroup Label="Sufficit Local Dependencies" Condition=" '$(Configuration)' != 'Packing' ">
       <ProjectReference Include="..\..\sufficit-asterisk-core\src\Sufficit.Asterisk.Core.csproj" />
-      <ProjectReference Include="..\..\sufficit-blazor-ui-material\src\Sufficit.Blazor.UI.Material.csproj" />
       <ProjectReference Include="..\..\sufficit-telephony-eventspanel\src\Sufficit.Telephony.EventsPanel.csproj" />
     </ItemGroup>
 

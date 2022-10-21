@@ -48,7 +48,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string? GetExtraInfo()
         {
-            string? info = string.Empty;
+            string? info;
             if (Monitor.IsInitiator)
             {
                 info = Content.DirectInwardDialing;
