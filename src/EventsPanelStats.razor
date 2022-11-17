@@ -1,117 +1,58 @@
 ﻿@inherits EventsPanelView
 @using Sufficit.Telephony.EventsPanel
-<div class="row mt-3">
-    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-header p-3 pt-2 pb-1">
-                <HyperLink 
-                OnClick="Refresh" 
-                CssClass="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute cursor-pointer"
-                ToolTipDescription="Clique para atualizar informações"
-                ToolTipPosition="ToolTipPosition.BOTTOM_LEFT"
-                >                    
-                    @if (Service.IsTrying)
-                    {                                        
-                        <div class="spinner-grow spinner-grow-sm text-primary small" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>                            
-                    }else{
-                        <i class="material-icons opacity-10">refresh</i>                         
-                    }                
-                </HyperLink>   
-                <div class="text-end pt-1">
-                    <p class="h4 font-weight-bolder mb-0">@ViewRefreshComponent.RefreshRate ms</p>
-                </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-                <p class="mb-0 text-sm">@Service.State?.ToString()</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-header p-3 pt-2 pb-1">
-                <div class="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute">
-                    <i class="material-icons opacity-10">fax</i>
-                </div>
-                <div class="text-end pt-1">
-                    <p class="h4 font-weight-bolder mb-0">
-                        @Panel.Cards.Peers.Count()
-                        @if (MaxButtons > 0)
-                        {
-                            <span countto="@MaxButtons">/@MaxButtons</span>
-                        }
-                    </p>
-                </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-                <p class="mb-0 text-sm">Ramais | Extensões</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-header p-3 pt-2 pb-1">
-                <div class="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute">
-                    <i class="material-icons opacity-10">nature</i>
-                </div>
-                <div class="text-end pt-1">
-                    <p class="h4 font-weight-bolder mb-0">
-                        @Panel.Cards.Trunks.Count()
-                    </p>
-                </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-                <p class="mb-0 text-sm">Troncos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-header p-3 pt-2 pb-1">
-                <div class="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute">
-                    <i class="material-icons opacity-10">traffic</i>
-                </div>
-                <div class="text-end pt-1">
-                    <p class="h4 font-weight-bolder mb-0">
-                        @Panel.Cards.Queues.Count()
-                    </p>
-                </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-                <p class="mb-0 text-sm">Filas de espera</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-@(ShowFilter ? "2" : "4") col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-            <div class="card-header p-3 pt-2 pb-1">
-                <div class="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute">
-                    <i class="material-icons opacity-10">balance</i>
-                </div>
-                <div class="text-end pt-1">
-                    <p class="h4 font-weight-bolder mb-0">
-                        Total
-                    </p>
-                </div>
-            </div>
-            <hr class="dark horizontal my-0">
-            <div class="card-footer p-3">
-                <p class="mb-0 text-sm text-nowrap text-truncate">
-                    @Panel.Cards.Count Cd | 
-                    @Service.Peers.Count Pr | 
-                    @Service.Queues.Count Fl | 
-                    @Service.Channels.Count Cn |
-                </p>
-            </div>
-        </div>
-    </div>
+<MudGrid Class="mt-1">
+    <MudItem xs="12" sm="6" md="3" lg="2">
+        <EventsPanelStatsCard
+            IsStateCard
+            Count="@Convert.ToInt32(@ViewRefreshComponent.RefreshRate)"
+            Title="@Service.State?.ToString()"
+            IconName="@Icons.Filled.Refresh"
+            IsServiceTrying="@Service.IsTrying"
+            OnClick="Refresh"
+        >
+        </EventsPanelStatsCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" lg="2">
+        <EventsPanelStatsCard
+            Count="@Panel.Cards.Peers.Count()"
+            MaxButtons="@MaxButtons"
+            Title="'Ramals | Extensões'"
+            IconName="@Icons.Filled.Fax"
+        >
+        </EventsPanelStatsCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" lg="2">
+        <EventsPanelStatsCard 
+            Title="Troncos"
+            Count="@Panel.Cards.Trunks.Count()"
+            IconName="@Icons.Filled.Nature"
+        >
+        </EventsPanelStatsCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" lg="2">
+        <EventsPanelStatsCard
+            Title="Filas de espera"
+            Count="@Panel.Cards.Queues.Count()"
+            IconName="@Icons.Filled.Traffic"
+        >
+        </EventsPanelStatsCard>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12" lg="4">
+        <EventsPanelStatsCard 
+            IsTotal
+            IconName="@Icons.Filled.Balance"
+            Title="@(
+                Panel.Cards.Count.ToString() + "Cd |" +
+                Service.Peers.Count.ToString() + "Pr |" +
+                Service.Queues.Count.ToString() + "Fl |" +
+                Service.Channels.Count.ToString() + "Cn |"
+            )"
+        >
+        </EventsPanelStatsCard>
+    </MudItem>
+
     @if (ShowFilter)
     {
         <EventsPanelStatsFilter Filtering="@Filtering"></EventsPanelStatsFilter>
     }
-</div>
+</MudGrid>
