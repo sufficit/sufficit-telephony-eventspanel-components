@@ -1,37 +1,37 @@
 ﻿@namespace Sufficit.Telephony.EventsPanel.Components
 
 <MudPaper Class="flex-column pa-3">
-        <MudStack Row="true" Justify="Justify.SpaceBetween">
-            <MudTooltip Text="@ToolTip">
-                <MudPaper Class="d-flex align-center mt-n5 pa-3 mud-theme-dark cursor-pointer" @onclick="Click">
-                    @if(IsServiceTrying)
-                    {
-                        <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="color: whitesmoke"/>
-                    }
-                    else
-                    {
-                        <MudIcon Icon="@IconName" Class="my-auto line" />
-                    }
-                </MudPaper>
-            </MudTooltip>
-        <MudText Typo="Typo.h5" Style="font-weight: bold">
-                @if(IsTotal)
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
+        <MudTooltip Text="@ToolTip">
+            <MudPaper Class="d-flex align-center mt-n5 pa-3 mud-theme-dark cursor-pointer" @onclick="Click">
+                @if(IsServiceTrying)
                 {
-                    @("Total")
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="color: whitesmoke"/>
                 }
                 else
                 {
-                    @(IsStateCard ? (Count + " ms") : Count)
+                    <MudIcon Icon="@IconName" Class="my-auto line" />
                 }
-            </MudText>
-        </MudStack>
-
-        <MudDivider Class="mt-2 mb-3"/>
-
-        <MudText Typo="Typo.body2">
-            @Title
+            </MudPaper>
+        </MudTooltip>
+        <MudText Typo="Typo.h5" Style="font-weight: bold">
+            @if(IsTotal)
+            {
+                @("Total")
+            }
+            else
+            {
+                @(IsStateCard ? (Count + " ms") : Count)
+            }
         </MudText>
-    </MudPaper>
+    </MudStack>
+
+    <MudDivider Class="mt-2 mb-3"/>
+
+    <MudText Typo="Typo.body2">
+        @Title
+    </MudText>
+</MudPaper>
 
 @code {
     [Parameter]
