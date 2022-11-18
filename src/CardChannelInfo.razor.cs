@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Sufficit.Asterisk;
-using Sufficit.Blazor.UI.Material;
-using Sufficit.Blazor.UI.Material.Services;
 using Sufficit.Telephony.EventsPanel;
 using System.Threading.Tasks;
 
@@ -86,13 +84,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string Queue => "Fila de espera: " + Content.Queue;
 
-
-
-        [Inject]
-        protected BlazorUIMaterialService UIService { get; set; } = default!;
-
         protected async void OnChannelClick(MouseEventArgs e)
         {
+            /*
             var alert = new SweetAlert()
             {
                 TimerProgressBar = true,
@@ -113,6 +107,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
                     Console.WriteLine("ouvindo canal de voz !");
                 }
             }
+            */
         }
     }
 }
