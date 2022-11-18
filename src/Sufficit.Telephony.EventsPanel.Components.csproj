@@ -1,11 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-	<PropertyGroup>
+	<PropertyGroup Label="Sufficit Targeting">
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<TypeScriptRemoveComments>True</TypeScriptRemoveComments>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
-
+	
 	<PropertyGroup Label="Sufficit Versioning">
 		<VersionSuffix>1.$([System.DateTime]::UtcNow.ToString(yy)).$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</VersionSuffix>
 		<AssemblyVersion Condition=" '$(VersionSuffix)' == '' ">1.0.0.0</AssemblyVersion>
@@ -56,15 +58,15 @@
 		</None>
 	</ItemGroup>
 	
-  <ItemGroup>
-    <Content Remove="bundleconfig.json" />
-    <Content Remove="compilerconfig.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="bundleconfig.json" />
+		<Content Remove="compilerconfig.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="bundleconfig.json" />
-    <None Include="compilerconfig.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="bundleconfig.json" />
+		<None Include="compilerconfig.json" />
+	</ItemGroup>
 
     <ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
@@ -72,10 +74,10 @@
 	    <PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.0" />
 	    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0" />
 	    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-    </ItemGroup>
+	</ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\assets\css\" />
+		<Folder Include="wwwroot\assets\css\" />
     </ItemGroup>
 	
 	<ItemGroup Label="Sufficit Dependencies Fixed">
@@ -89,8 +91,7 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Sufficit Local Dependencies" Condition=" '$(Configuration)' != 'Packing' ">
-      <ProjectReference Include="..\..\sufficit-asterisk-core\src\Sufficit.Asterisk.Core.csproj" />
-      <ProjectReference Include="..\..\sufficit-telephony-eventspanel\src\Sufficit.Telephony.EventsPanel.csproj" />
+		<ProjectReference Include="..\..\sufficit-asterisk-core\src\Sufficit.Asterisk.Core.csproj" />
+		<ProjectReference Include="..\..\sufficit-telephony-eventspanel\src\Sufficit.Telephony.EventsPanel.csproj" />
     </ItemGroup>
-
 </Project>
