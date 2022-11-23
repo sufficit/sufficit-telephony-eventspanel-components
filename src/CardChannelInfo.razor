@@ -1,5 +1,4 @@
-﻿@using Sufficit.Blazor.UI.Material.Components
-<HyperLink OnClick="OnChannelClick">
+﻿<HyperLink OnClick="OnChannelClick">
 <div class="card-channel row m-0 text-nowrap" data-hangup="@Content.Hangup?.Description" data-initiator="@Monitor.IsInitiator" data-direction="@Content.Direction" data-lastupdate="@DateTime.Now">
     <div class="card-channel-actions col-2 px-2">
         <HyperText CssClass="cursor-pointer" data-tooltip="@Content.State" data-state="@Content.State">  
