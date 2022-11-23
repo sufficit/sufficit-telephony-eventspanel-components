@@ -1,31 +1,34 @@
 ﻿@inherits EventsPanelCardAbstract
-<div class="card px-1" data-state="@(Card.IsMonitored ? Content?.Status : null)" data-status="@Card.Channels.Any()"> 
-    <div class="card-header p-0 bg-transparent">
-        <div class="row m-0 text-nowrap">
-            <div class="col-2 px-1" data-tooltip="@PeerKey" style="line-height: 2rem;">
-                <img src="@GetAvatarSrc()" class="avatar avatar-xs">
-            </div>
-            <div class="col-9 pe-1" style="line-height: 2rem;">     
-                <small class="text-xs text-truncate">
-                    <span>@Card.Label</span>
-                </small>
-                <span data-tooltip="Canais Ativos" class="text-xs cursor-pointer"> :: @Card.Channels.Count</span>
-            </div>
-            <div class="col-1 p-0 pe-1 text-end" style="line-height: 2rem;">
-                @if (@Card.IsMonitored && @Content?.Address != null)
-                {                
-                    <a class="cursor-pointer pe-1" role="button" data-tooltip-inverted data-tooltip="@Content?.Status">
-                        <i class="material-icons text-primary text-sm align-middle">visibility</i>
-                    </a>
-                }
-            </div>
-        </div>
-    </div>
+<MudPaper Class="pa-1" Style="@GetCardStyle()">
+    <MudGrid>
+        <MudItem Class="d-flex flex-column justify-center">
+            <MudTooltip Text="@PeerKey">
+                <MudAvatar Image="@GetAvatarSrc()" Size="Size.Small" />
+            </MudTooltip>
+        </MudItem>
+        <MudItem>
+            <MudText Typo="Typo.body2">
+                @Card.Label
+                <MudTooltip Text="Canais Ativos"> :: @Card.Channels.Count</MudTooltip>
+            </MudText>
+        </MudItem>
+        <MudItem Class="d-flex flex-column justify-center">
+            @if (@Card.IsMonitored && @Content?.Address != null)
+            {
+                <MudTooltip Text="@Content?.Address">
+                    <MudIcon Icon="@Icons.Material.Filled.Place" Size="Size.Small"></MudIcon>
+                </MudTooltip>
+            }
+        </MudItem>
+    </MudGrid>
+
     @if (Card.Channels.Any())
     {
-        <hr class="horizontal mt-0 dark" style="padding: 0;margin: 0;width: 100%;" />
-        <div class="card-body d-flex flex-column align-items-center p-0">    
-            <CardChannels Channels="@Card.Channels" Kind="@EventsPanelCardKind.TRUNK"></CardChannels>
-        </div>
+        <MudDivider Class="my-1" />
+        <MudGrid>
+            <MudStack AlignItems="AlignItems.Center">
+                <CardChannels Channels=@Card.Channels Kind="@EventsPanelCardKind.TRUNK"></CardChannels>
+            </MudStack>
+        </MudGrid>
     }
-</div>
+</MudPaper>

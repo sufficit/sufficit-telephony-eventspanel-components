@@ -1,0 +1,71 @@
+﻿@namespace Sufficit.Telephony.EventsPanel.Components
+
+<MudPaper Class="flex-column pa-3">
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
+        <MudTooltip Text="@ToolTip">
+            <MudPaper Class="d-flex align-center mt-n5 pa-3 mud-theme-dark cursor-pointer" @onclick="Click">
+                @if(IsServiceTrying)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="color: whitesmoke"/>
+                }
+                else
+                {
+                    <MudIcon Icon="@IconName" Class="my-auto line" />
+                }
+            </MudPaper>
+        </MudTooltip>
+        <MudText Typo="Typo.h5" Style="font-weight: bold">
+            @if(IsTotal)
+            {
+                @("Total")
+            }
+            else
+            {
+                @(IsStateCard ? (Count + " ms") : Count)
+            }
+        </MudText>
+    </MudStack>
+
+    <MudDivider Class="mt-2 mb-3"/>
+
+    <MudText Typo="Typo.body2">
+        @Title
+    </MudText>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string ToolTip { get; set; } = "";
+
+    [Parameter]
+    public int Count { get; set; }
+
+    [Parameter]
+    public string IconName { get; set; } = "";
+
+    [Parameter]
+    public bool IsServiceTrying { get; set; }
+
+    [Parameter]
+    public bool IsStateCard { get; set; }
+
+    [Parameter]
+    public bool IsTotal { get; set; }
+
+    [Parameter]
+    public int MaxButtons { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task Click()
+    {
+        if (IsStateCard)
+        {
+            await OnClick.InvokeAsync();
+        }
+    }
+}

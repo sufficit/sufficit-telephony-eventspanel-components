@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
+using Sufficit.Asterisk;
 using Sufficit.Asterisk.Manager.Events;
 
 namespace Sufficit.Telephony.EventsPanel.Components
@@ -69,5 +70,16 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected void OnToggleClicked(MouseEventArgs _)
             => Toggle();
+
+        protected String GetCardStyle()
+        {
+            string val = "width: 260px; background: rgba(180,240,255,.1);";
+
+            if (Card.Channels.Any()) { }
+
+            if (Card.IsMonitored) { }
+
+            return val;
+        }
     }
 }
