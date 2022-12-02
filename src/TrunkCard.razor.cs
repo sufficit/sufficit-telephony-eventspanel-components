@@ -22,7 +22,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected String GetCardStyle()
         {
-            string val = "width: 260px; ";
+            string val = "width: 233.6px;";
 
             if (Card.Channels.Any())
             {
