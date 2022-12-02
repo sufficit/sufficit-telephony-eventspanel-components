@@ -1,4 +1,29 @@
-﻿<div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
+﻿@if (Filtering != null)
+{
+    <MudTextField
+        Clearable
+        Class="my-3"
+        Placeholder="Texto para filtrar ..." 
+        Adornment="Adornment.Start" 
+        AdornmentIcon="@Icons.Material.Filled.FilterAlt" 
+        ValueChanged="@((e) => @Filtering?.Filter(e))">
+    </MudTextField>
+}
+else
+{
+    <MudTextField 
+        Disabled 
+        Clearable
+        Class="my-3"
+        Placeholder="Texto para filtrar ..."
+        Adornment="Adornment.Start"
+        AdornmentIcon="@Icons.Material.Filled.FilterAlt"
+        Value="@Filtering?.FilterText">
+    </MudTextField>
+}
+
+<!--
+<div class="col-xl-2 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
         <div class="card-header p-3 pt-2 pb-1">
             <div class="icon icon-shape bg-gradient-dark shadow text-center border-radius-md mt-n3 position-absolute">
@@ -21,3 +46,5 @@
         </div>
     </div>
 </div>    
+
+-->
