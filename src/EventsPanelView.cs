@@ -10,7 +10,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public abstract class EventsPanelView : ComponentBase
     {
         [CascadingParameter]
-        public EventsPanelViewRefresh ViewRefreshComponent { get; set; } = default!;
+        public EventsPanelViewRefresh? ViewRefreshComponent { get; set; } = default!;
 
         protected bool ShouldRefreshView { get; set; }
 
