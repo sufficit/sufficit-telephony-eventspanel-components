@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Sufficit.Blazor.UI.Material;
 using Sufficit.Telephony.EventsPanel;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,8 @@ namespace Sufficit.Telephony.EventsPanel.Components
         public EventsPanelService Service { get; internal set; } = default!;
 
         [Parameter]
-        public Panel Panel { get; set; } = default!;
+        [EditorRequired]
+        public Panel? Panel { get; set; }
 
         [CascadingParameter]
         public TextSearchControl? TextSearch { get; set; }
@@ -24,13 +24,12 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         public FilteringControl? Filtering { get; internal set; }
 
-
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
 
-            if (Panel == null)
-                Panel = Service.Panel;
+            // if panel null, update from service
+            Panel ??= Service.Panel;
 
             if (TextSearch != null)
                 Filtering = new FilteringControl(TextSearch);

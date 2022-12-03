@@ -1,5 +1,6 @@
 ﻿@inherits EventsPanelView
 @using Sufficit.Telephony.EventsPanel
+
 <CascadingValue Value="@Panel">
     <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Panel.Options.RefreshRate">
         @if(Exception != null)

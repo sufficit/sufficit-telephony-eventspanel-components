@@ -10,14 +10,14 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public abstract class EventsPanelView : ComponentBase
     {
         [CascadingParameter]
-        public EventsPanelViewRefresh? ViewRefreshComponent { get; set; } = default!;
+        public EventsPanelViewRefresh? ViewRefreshComponent { get; set; }
 
         protected bool ShouldRefreshView { get; set; }
 
         public void ShouldRefresh()
         {
             ShouldRefreshView = true;
-            if (!ViewRefreshComponent.IsSincronous)
+            if (ViewRefreshComponent != null && !ViewRefreshComponent.IsSincronous)
                 ViewRefresh();
         }
 
@@ -36,10 +36,14 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (firstRender)
             {
                 // Applying sincronous refresh
-                ViewRefreshComponent.Refresh += ViewRefresh;
+                if(ViewRefreshComponent != null)
+                    ViewRefreshComponent.Refresh += ViewRefresh;
             }
         }
 
-        ~EventsPanelView() { ViewRefreshComponent.Refresh -= ViewRefresh; }
+        ~EventsPanelView() { 
+            if (ViewRefreshComponent != null) 
+                ViewRefreshComponent.Refresh -= ViewRefresh; 
+        }
     }
 }

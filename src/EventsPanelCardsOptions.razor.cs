@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Sufficit.Blazor.UI.Material;
-using Sufficit.Blazor.UI.Material.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +10,14 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public partial class EventsPanelCardsOptions : ComponentBase
     {
         [Parameter]
-        public PaggingControl Pagging { get; set; } = default!;
+        public PaggingControl? Pagging { get; set; }
 
         [CascadingParameter]
-        public PaggingContext PaggingContext { get; set; } = default!;
+        public PaggingContext? PaggingContext { get; set; }
 
         [Parameter]
         public uint? Total { get; set; }
-
+        /*
         private async void PaggingSelectChanged(SelectedChangedEventArgs<string?> e)
         {
             if (uint.TryParse(e.Current, out uint pagesize))
@@ -28,6 +26,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 await InvokeAsync(StateHasChanged);
             }
         }
-
+        */
     }
 }

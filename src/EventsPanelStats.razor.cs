@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Sufficit.Blazor.UI.Material;
 using Sufficit.Telephony.EventsPanel;
 using System;
 using System.Collections.Generic;

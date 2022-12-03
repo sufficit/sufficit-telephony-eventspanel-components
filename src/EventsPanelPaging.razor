@@ -1,5 +1,4 @@
-﻿@using Sufficit.Blazor.UI.Material.Components
-@using Sufficit.Telephony.EventsPanel.Components
+﻿@using Sufficit.Telephony.EventsPanel.Components
 <div class="row mt-2">
     <div class="col-lg-4 col-md-6 col-12">
         <div class="d-flex align-items-center position-relative">
@@ -30,7 +29,5 @@
 </div>
 @code {
     [CascadingParameter]
-    public EventsPanel Panel { get; set; } = default!;
-
-
+    public EventsPanel? Panel { get; set; }
 }

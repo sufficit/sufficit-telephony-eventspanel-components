@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Sufficit.Asterisk;
 using Sufficit.Asterisk.Events;
-using Sufficit.Blazor.UI.Material;
 using Sufficit.Telephony.EventsPanel;
 using System.Threading.Tasks;
 
@@ -33,13 +32,14 @@ namespace Sufficit.Telephony.EventsPanel.Components
         {
             await InvokeAsync(StateHasChanged);
         }
-
+        /*
         protected Animations? GetAnimations(QueueAgentInfo? info)
         {
             if (info != null && info.Status.HasFlag(AsteriskDeviceStatus.Ringing))
                 return Animations.Blink;
             return null;
         }
+        */
         protected string GetIconKey(QueueAgentInfo? info)
         {
             switch (info?.Status)

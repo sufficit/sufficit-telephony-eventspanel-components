@@ -82,7 +82,6 @@
 
 	<ItemGroup Label="Sufficit Dependencies Fixed">
 		<PackageReference Include="MudBlazor" Version="6.1.2" />
-		<PackageReference Include="Sufficit.Blazor.UI.Material" Version="1.22.*" />
 	</ItemGroup>
 	
 	<ItemGroup Label="Sufficit Dependencies on Packing" Condition=" '$(Configuration)' == 'Packing' ">
