@@ -4,9 +4,9 @@
     <MudItem xs="12" sm="6" md="3" lg="2">
         <EventsPanelStatsCard
             IsStateCard
-            Count="@Convert.ToInt32(@ViewRefreshComponent.RefreshRate)"
+            Count="@Convert.ToInt32(@ViewRefreshComponent?.RefreshRate ?? 0)"
             Title="@Service.State?.ToString()"
-            IconName="@Icons.Filled.Refresh"
+                              IconName="@Icons.Material.Filled.Refresh"
             IsServiceTrying="@Service.IsTrying"
             OnClick="Refresh"
         >
@@ -17,7 +17,7 @@
             Count="@Panel.Cards.Peers.Count()"
             MaxButtons="@MaxButtons"
             Title="'Ramals | Extensões'"
-            IconName="@Icons.Filled.Fax"
+            IconName="@Icons.Material.Filled.Fax"
         >
         </EventsPanelStatsCard>
     </MudItem>
@@ -25,28 +25,26 @@
         <EventsPanelStatsCard 
             Title="Troncos"
             Count="@Panel.Cards.Trunks.Count()"
-            IconName="@Icons.Filled.Nature"
-        >
+                              IconName="@Icons.Material.Filled.Nature">
         </EventsPanelStatsCard>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" lg="2">
         <EventsPanelStatsCard
             Title="Filas de espera"
             Count="@Panel.Cards.Queues.Count()"
-            IconName="@Icons.Filled.Traffic"
-        >
+                              IconName="@Icons.Material.Filled.Traffic">
         </EventsPanelStatsCard>
     </MudItem>
     <MudItem xs="12" sm="12" md="12" lg="4">
         <EventsPanelStatsCard 
-            IsTotal
-            IconName="@Icons.Filled.Balance"
-            Title="@(
-                Panel.Cards.Count.ToString() + "Cd |" +
-                Service.Peers.Count.ToString() + "Pr |" +
-                Service.Queues.Count.ToString() + "Fl |" +
-                Service.Channels.Count.ToString() + "Cn |"
-            )"
+                IsTotal
+                IconName="@Icons.Material.Filled.Balance"
+                Title="@(
+                    Panel.Cards.Count.ToString() + "Cd |" +
+                    Service.Peers.Count.ToString() + "Pr |" +
+                    Service.Queues.Count.ToString() + "Fl |" +
+                    Service.Channels.Count.ToString() + "Cn |"
+                )"
         >
         </EventsPanelStatsCard>
     </MudItem>
