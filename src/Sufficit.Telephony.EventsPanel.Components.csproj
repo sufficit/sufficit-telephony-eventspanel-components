@@ -80,17 +80,18 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
-	<ItemGroup Label="Sufficit Dependencies Fixed">
+	<ItemGroup>
 		<PackageReference Include="MudBlazor" Version="6.1.7" />
 	</ItemGroup>
-	
-	<ItemGroup Label="Sufficit Dependencies on Packing" Condition=" '$(Configuration)' == 'Packing' ">
+
+	<ItemGroup Condition="'$(Configuration)'=='Packing' Or '$(Configuration)'=='TortuTeam'" Label="Sufficit Dependencies on Packing Or Tortu">
 		<PackageReference Include="Sufficit.Asterisk.Core" Version="1.*" />
 		<PackageReference Include="Sufficit.Telephony.EventsPanel" Version="1.*" />
 	</ItemGroup>
 
-	<ItemGroup Label="Sufficit Local Dependencies" Condition=" '$(Configuration)' != 'Packing' ">
+	<ItemGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'" Label="Sufficit Local Dependencies">
 		<ProjectReference Include="..\..\sufficit-asterisk-core\src\Sufficit.Asterisk.Core.csproj" />
 		<ProjectReference Include="..\..\sufficit-telephony-eventspanel\src\Sufficit.Telephony.EventsPanel.csproj" />
     </ItemGroup>
+	
 </Project>
