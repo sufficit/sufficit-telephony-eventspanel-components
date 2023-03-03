@@ -2,21 +2,34 @@
 @using Sufficit.Telephony.EventsPanel
 
 <CascadingValue Value="@Panel">
-    <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Panel.Options.RefreshRate">
-        @if(Exception != null)
+    @if(!Service.IsConfigured)
+    {
+        <MudAlert Severity="Severity.Error">Events Panel Service is not configured</MudAlert>
+    } else {
+        @if (Panel == null)
         {
-            <div class="alert alert-danger mb-0 m-3 text-white">
-                @Exception.Message
-            </div>
-        } 
-        <EventsPanelStats Filtering="Filtering"></EventsPanelStats>        
-        @foreach(var error in Service.Exceptions)
+            <MudAlert Severity="Severity.Error">Events Panel is null</MudAlert>
+        } else if (!Panel.HasCards())
         {
-            <div class="card p-3">
-                <span>@error.Message</span>          
-            </div>
+            <MudAlert Severity="Severity.Error">Events Panel has no cards</MudAlert>
         }
-        <MudDivider Class="my-1"></MudDivider>
-        <EventsPanelCardArea Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
-    </EventsPanelViewRefresh>
+
+        <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Panel.Options.RefreshRate">
+            @if(Exception != null)
+            {
+                <div class="alert alert-danger mb-0 m-3 text-white">
+                    @Exception.Message
+                </div>
+            } 
+            <EventsPanelStats Filtering="Filtering"></EventsPanelStats>        
+            @foreach(var error in Service.Exceptions)
+            {
+                <div class="card p-3">
+                    <span>@error.Message</span>          
+                </div>
+            }
+            <MudDivider Class="my-1"></MudDivider>
+            <EventsPanelCardArea Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
+        </EventsPanelViewRefresh>
+    }
 </CascadingValue>

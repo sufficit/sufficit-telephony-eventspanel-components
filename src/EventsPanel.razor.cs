@@ -14,7 +14,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
         public EventsPanelService Service { get; internal set; } = default!;
 
         [Parameter]
-        [EditorRequired]
         public Panel? Panel { get; set; }
 
         [CascadingParameter]
@@ -46,9 +45,11 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await base.OnAfterRenderAsync(firstRender);
-            if (firstRender)
-            {
+            if (!firstRender) 
+                return;
+            
+            if (Panel != null) 
+            { 
                 // Listening pagging changes
                 Pagging.OnPaggingChanged += (_) => ShouldRefresh();
 
@@ -63,6 +64,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        protected bool HasCards() => Panel.Cards.Any();              
+        protected bool HasCards() => Panel?.HasCards() ?? false;              
     }
 }
