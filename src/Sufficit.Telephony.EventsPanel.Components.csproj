@@ -84,12 +84,12 @@
 		<PackageReference Include="MudBlazor" Version="6.2.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)'=='Packing' Or '$(Configuration)'=='TortuTeam'" Label="Sufficit Dependencies on Packing Or Tortu">
+	<ItemGroup Label="Sufficit Dependencies on Packing" Condition=" '$(Configuration)' == 'Packing' ">
 		<PackageReference Include="Sufficit.Asterisk.Core" Version="1.*" />
 		<PackageReference Include="Sufficit.Telephony.EventsPanel" Version="1.*" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'" Label="Sufficit Local Dependencies">
+	<ItemGroup Label="Sufficit Local Dependencies" Condition=" '$(Configuration)' != 'Packing' ">
 		<ProjectReference Include="..\..\sufficit-asterisk-core\src\Sufficit.Asterisk.Core.csproj" />
 		<ProjectReference Include="..\..\sufficit-telephony-eventspanel\src\Sufficit.Telephony.EventsPanel.csproj" />
     </ItemGroup>
