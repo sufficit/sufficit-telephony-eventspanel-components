@@ -84,7 +84,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string Queue => "Fila de espera: " + Content.Queue;
 
-        protected async void OnChannelClick(MouseEventArgs e)
+        protected void OnChannelClick(MouseEventArgs e)
         {
             /*
             var alert = new SweetAlert()

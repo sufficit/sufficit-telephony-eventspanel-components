@@ -75,9 +75,9 @@
 	<ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 		<PackageReference Include="BuildWebCompiler" Version="1.12.405" Condition="$([MSBuild]::IsOsPlatform('Windows'))" />
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="7.*" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.*" />
 	</ItemGroup>
 
 	<ItemGroup>
