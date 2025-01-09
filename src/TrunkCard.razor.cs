@@ -4,10 +4,8 @@ using Sufficit.Asterisk;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class TrunkCard : EventsPanelCardAbstract
+    public partial class TrunkCard : EventsPanelCardAbstract<EventsPanelTrunkCard>
     {
-        public new EventsPanelTrunkCard Card { get => (EventsPanelTrunkCard)base.Card; set => base.Card = value; }
-
         protected PeerInfo? Content => Card.Monitor?.Content;
 
         protected string? PeerKey 
@@ -20,7 +18,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
             } 
         }
 
-        protected String GetCardStyle()
+        protected string GetCardStyle()
         {
             string val = "width: 233.6px;";
 

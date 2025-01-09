@@ -8,7 +8,7 @@
 
     protected Timer? aTimer;
 
-    public bool IsSincronous => aTimer != null;
+    public bool IsSynchronous => aTimer != null;
 
     public event Action? Refresh;
 
@@ -19,12 +19,8 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
-
         // Applying refresh rate
-        if (firstRender && RefreshRate > 0)
-        {
-            aTimer = new Timer(ViewRefreshElapsed, null, 1000, (int)RefreshRate);
-        }
+        if (firstRender && RefreshRate.HasValue && RefreshRate.Value > 0)        
+            aTimer = new Timer(ViewRefreshElapsed, null, 1000, (int)RefreshRate);        
     }
 }

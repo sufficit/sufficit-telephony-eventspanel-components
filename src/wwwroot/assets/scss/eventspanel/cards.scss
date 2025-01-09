@@ -16,8 +16,21 @@
     grid-gap: .3rem;
 }
 
-.events-panel .card {
+.events-panel .card-grid .card {
+    width: 215px;
     min-width: 150px;
+    max-width: 250px;
+    padding: 4px;
+
+    .card-avatar {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .card-label-text {
+        white-space: nowrap;
+    }
 }
 
 .events-panel .card[data-state="Unknown"] {

@@ -1,24 +1,16 @@
-﻿@inherits EventsPanelCardAbstract
-<MudPaper Class="pa-1" Style="@GetCardStyle()">
+﻿@inherits EventsPanelCardAbstract<EventsPanelPeerCard>
+<MudPaper Class="card" Style="@GetCardStyle()" data-kind="peer" data-state="@Content?.Status">
     <MudGrid Spacing="2">
-        <MudItem Class="d-flex flex-column justify-center">
+        <MudItem Class="card-avatar">
             <MudTooltip Text="@PeerKey">
-                <MudAvatar Image="@GetAvatarSrc()" Size="Size.Small" />
+                <MudAvatar Size="Size.Small">
+                    <MudImage Src="@GetAvatarSrc()"></MudImage>
+                </MudAvatar>
             </MudTooltip>
         </MudItem>
-        <MudItem>
-            <MudTooltip Text="@Card.Label">
-                <MudText 
-                    Typo="Typo.body2"
-                    Style="
-                        width: 18ch; 
-                        overflow: hidden; 
-                        white-space: nowrap; 
-                        text-overflow: ellipsis;
-                    "
-                >
-                    @Card.Label
-                </MudText>
+        <MudItem Class="card-label">
+            <MudTooltip Text="@Card.Label" Class="card-label-tooltip">
+                <MudText Typo="Typo.body2" Class="card-label-text">@GetLabel()</MudText>
              </MudTooltip>
         </MudItem>
         <MudItem Class="d-flex justify-center align-center">

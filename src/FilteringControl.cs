@@ -15,9 +15,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         public FilteringControl(TextSearchControl? control)
         {
-            if (control != null)
+            _control = control;
+            if (_control != null)
             {
-                _control = control;
                 FilterText = _control.Value;
                 _control.OnValueChanged += Filter;
             }

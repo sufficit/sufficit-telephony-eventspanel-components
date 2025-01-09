@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Sufficit.Asterisk;
-using Sufficit.Asterisk.Events;
-using Sufficit.Telephony.EventsPanel;
-using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {

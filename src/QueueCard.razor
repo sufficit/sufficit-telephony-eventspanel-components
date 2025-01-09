@@ -1,9 +1,11 @@
-﻿@inherits EventsPanelCardAbstract
+﻿@inherits EventsPanelCardAbstract<EventsPanelQueueCard>
 <MudPaper Class="pa-1 align-self-center" Style="@GetCardStyle()">
     <MudGrid Spacing="2">
         <MudItem xs="2" sm="2" md="2" Class="d-flex flex-column justify-center">
             <MudTooltip Text="@Content!.Key">
-                <MudAvatar Image="@GetAvatarSrc()" Size="Size.Small" />
+                <MudAvatar Size="Size.Small">
+                    <MudImage Src="@GetAvatarSrc()"></MudImage>
+                </MudAvatar>
             </MudTooltip>
         </MudItem>
         <MudItem xs="8" sm="8" md="8">

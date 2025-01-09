@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Sufficit.Telephony.EventsPanel;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,22 +15,26 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [CascadingParameter]
         protected Panel Panel { get; set; } = default!;
 
-
-        [Parameter]
-        public FilteringControl? Filtering { get; set; }
-
-        protected bool ShowFilter => Filtering != null && !Filtering.External;
-
-        protected Exception? Exception { get; set; }
-
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnAfterRender(firstRender);
             if (firstRender)
             {
-                Service.OnChanged += (_, _) => ShouldRefresh();
-                Service.Channels.OnChanged += (_, _) => ShouldRefresh();                
+                Service.OnChanged += OnEPSChanged;
+                Service.Channels.OnChanged += OnEPSChannelsChanged;                
             }
+        }
+
+        private void OnEPSChanged(HubConnectionState? _, Exception? __)
+            => ShouldRefresh();
+
+        private void OnEPSChannelsChanged(ChannelInfoMonitor? _, object? __)
+            => ShouldRefresh();
+
+        public override void Dispose(bool disposing)
+        {
+            Service.OnChanged -= OnEPSChanged;
+            Service.Channels.OnChanged -= OnEPSChannelsChanged;
         }
 
         protected async Task Refresh()

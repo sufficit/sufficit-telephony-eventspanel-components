@@ -7,32 +7,47 @@ using System.Threading.Tasks;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public abstract class EventsPanelView : ComponentBase
+    public abstract class EventsPanelView : ComponentBase, IDisposable
     {
         [CascadingParameter]
         public EventsPanelViewRefresh? ViewRefreshComponent { get; set; }
 
         protected bool ShouldRefreshView { get; set; }
 
+        public bool IsRendered { get; internal set; }
+
         public void ShouldRefresh()
         {
             ShouldRefreshView = true;
-            if (ViewRefreshComponent != null && !ViewRefreshComponent.IsSincronous)
+            if (ViewRefreshComponent != null && !ViewRefreshComponent.IsSynchronous)
                 ViewRefresh();
         }
 
         protected async void ViewRefresh()
         {
-            if (ShouldRefreshView)
+            if (ShouldRefreshView && IsRendered)
             {
                 ShouldRefreshView = false;
                 await InvokeAsync(StateHasChanged);
             }
         }
 
+        private bool _disposed;
+        void IDisposable.Dispose()
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                IsRendered = false;
+                Dispose(true);
+            }
+        }
+
+        public virtual void Dispose(bool disposing) { }
+
         protected override void OnAfterRender(bool firstRender)
         {
-            base.OnAfterRender(firstRender);
+            IsRendered = true;
             if (firstRender)
             {
                 // Applying sincronous refresh
@@ -41,7 +56,8 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        ~EventsPanelView() { 
+        ~EventsPanelView() 
+        { 
             if (ViewRefreshComponent != null) 
                 ViewRefreshComponent.Refresh -= ViewRefresh; 
         }

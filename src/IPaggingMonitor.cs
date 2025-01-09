@@ -11,6 +11,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
         delegate void PaggingChanged(IPagging? sender);
 
         event PaggingChanged? OnPaggingChanged;
+
         void SetPageSize(uint pageSize);
     }
 }

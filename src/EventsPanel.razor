@@ -1,35 +1,29 @@
 ﻿@inherits EventsPanelView
 @using Sufficit.Telephony.EventsPanel
-
-<CascadingValue Value="@Panel">
-    @if(!Service.IsConfigured)
-    {
-        <MudAlert Severity="Severity.Error">Events Panel Service is not configured</MudAlert>
-    } else {
-        @if (Panel == null)
-        {
-            <MudAlert Severity="Severity.Error">Events Panel is null</MudAlert>
-        } else if (!Panel.HasCards())
-        {
-            <MudAlert Severity="Severity.Error">Events Panel has no cards</MudAlert>
-        }
-
-        <EventsPanelViewRefresh @ref="ViewRefreshComponent" RefreshRate="@Panel.Options.RefreshRate">
-            @if(Exception != null)
+<div class="events-panel">
+    <CascadingValue Value="@Panel" IsFixed="true">            
+        <EventsPanelViewRefresh @ref="ViewRefreshComponent">
+            @if (Exception != null)
             {
                 <div class="alert alert-danger mb-0 m-3 text-white">
                     @Exception.Message
                 </div>
-            } 
-            <EventsPanelStats Filtering="Filtering"></EventsPanelStats>        
-            @foreach(var error in Service.Exceptions)
-            {
-                <div class="card p-3">
-                    <span>@error.Message</span>          
-                </div>
             }
-            <MudDivider Class="my-1"></MudDivider>
-            <EventsPanelCardArea Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
-        </EventsPanelViewRefresh>
-    }
-</CascadingValue>
+
+            <EventsPanelStats></EventsPanelStats>
+
+            @if (ShowFilter)
+            {
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <EventsPanelStatsFilter Filtering="@Filtering"></EventsPanelStatsFilter>
+                </MudItem>
+            }
+
+            @if (Panel.HasCards())
+            {
+                <MudDivider Class="my-1"></MudDivider>
+                <EventsPanelCardArea Cards="Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
+            }
+        </EventsPanelViewRefresh>        
+    </CascadingValue>
+</div>

@@ -6,10 +6,8 @@ using Sufficit.Asterisk.Manager.Events;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public partial class QueueCard : EventsPanelCardAbstract
+    public partial class QueueCard : EventsPanelCardAbstract<EventsPanelQueueCard>
     {
-        public new EventsPanelQueueCard Card { get => (EventsPanelQueueCard)base.Card; set => base.Card = value; }
-
         [Inject]
         public EventsPanelService Service { get; internal set; } = default!;
 
@@ -18,12 +16,12 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected QueueInfo? Content => Card.Monitor?.Content;
 
-        protected override void MonitorChanged(IMonitor? monitor, object? state)
+        protected override void OnMonitorChanged(IMonitor? monitor, object? state)
         {
             if (state is QueueCallerLeaveEvent leave)            
                 Card.Channels.Remove(leave.Channel);            
 
-            base.MonitorChanged(monitor, state);
+            base.OnMonitorChanged(monitor, state);
         }
 
         protected override void OnInitialized()

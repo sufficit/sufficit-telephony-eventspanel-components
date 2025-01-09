@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Sufficit.Telephony.EventsPanel.Components
 {
-    public abstract class EventsPanelCardAbstract : ComponentBase
+    public abstract class EventsPanelCardAbstract<T> : ComponentBase, IDisposable where T : EventsPanelCard
     {
         [Parameter, EditorRequired]
-        public virtual EventsPanelCard Card { get; set; } = null!;
+        public virtual T Card { get; set; } = default!;
 
         [Parameter]
         public string? Avatar { get; set; }
@@ -14,38 +13,62 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public Task<string>? HandleAvatar { get; set; }
 
+        /// <summary>
+        ///     Indicates that this object is active in use by frontend
+        /// </summary>
+        public bool IsRendered { get; internal set; }
+
         protected override async Task OnParametersSetAsync()
         {
-            await base.OnParametersSetAsync();            
-            if (Card.IsMonitored)
+            if (HandleAvatar != null)
+                Avatar = await HandleAvatar;
+
+            if (Card.Monitor != null)
             {
-                Card.Monitor!.OnChanged += MonitorChanged;
+                // ensure a single handler
+                Card.Monitor.OnChanged -= OnMonitorChanged;
+                Card.Monitor.OnChanged += OnMonitorChanged;
             }
 
+            Card.Channels.OnChanged -= ChannelsChanged;
             Card.Channels.OnChanged += ChannelsChanged;
+        }
 
-            if (HandleAvatar != null)
-                Avatar = await HandleAvatar;            
+        protected override void OnAfterRender(bool firstRender)
+        {
+            IsRendered = true;
+        }
+
+        public void Dispose()
+        {
+            IsRendered = false;
+            Console.WriteLine($"disposing card, for: {Card.Monitor?.Key}");
+
+            if (Card.Monitor != null)            
+                Card.Monitor.OnChanged -= OnMonitorChanged;            
+
+            Card.Channels.OnChanged -= ChannelsChanged;
         }
 
         /// <summary>
         /// On Channels changed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="state"></param>
         protected virtual async void ChannelsChanged(ChannelInfoMonitor? sender, object? state)
         {
-            await InvokeAsync(StateHasChanged);
+            if (IsRendered) 
+                await InvokeAsync(StateHasChanged);
         }
 
         /// <summary>
         /// On Underlaying Monitor Changed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="state"></param>
-        protected virtual async void MonitorChanged(IMonitor? sender, object? state)
+        protected virtual async void OnMonitorChanged(IMonitor? sender, object? state)
         {
-            await InvokeAsync(StateHasChanged);
+            if (IsRendered)
+            {
+                Console.WriteLine($"event received: {state}, for: {Card.Monitor?.Key}");
+                await InvokeAsync(StateHasChanged);
+            }
         }
 
         protected string GetAvatarSrc()

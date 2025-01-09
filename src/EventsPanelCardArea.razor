@@ -7,8 +7,8 @@
             <EventsPanelCardsOptions Pagging="@Pagging" Total="Pagging.PageTotalItems"></EventsPanelCardsOptions>
         </PaggingContext>
     }
-    <MudGrid>
-        <MudItem xs="12" sm="12" md="8" lg="9">
+    <MudGrid Class="card-grid">
+        <MudItem xs="12" sm="12" md="@(OnlyPeers ? 12 : 8)" lg="@(OnlyPeers ? 12 : 9)">
             <MudHidden Breakpoint="Breakpoint.SmAndDown">
                 <MudStack Row Class="flex-wrap" Spacing="2">
                     @foreach (var Item in GetPeers())
@@ -18,7 +18,7 @@
                 </MudStack>
             </MudHidden>
             <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert>
-                <MudStack Row Class="flex-wrap" Justify="Justify.SpaceAround" Spacing="2">
+                <MudStack Row Class="flex-wrap card-grid-peers" Spacing="2" Justify="Justify.SpaceAround">
                     @foreach (var Item in GetPeers())
                     {
                         <PeerCard Card=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
@@ -26,27 +26,33 @@
                 </MudStack>
             </MudHidden>
         </MudItem>
-        <MudItem xs="12" sm="12" md="4" lg="3">
-           @if(Panel.Options.ShowTrunks)
-            {
-                <MudGrid Spacing="1">
-                    @foreach (var Item in GetTrunks())
-                    {
-                        <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
-                            <TrunkCard Card=@Item HandleAvatar="@GetAvatar(Item)"></TrunkCard>
-                        </MudItem>
-                    }
-                </MudGrid>
-                <MudDivider Class="my-4"/>
-            }
-            <MudGrid Spacing="1">
-                @foreach (var Item in GetQueues())
+        @if (!OnlyPeers)
+        {
+            <MudItem xs="12" sm="12" md="4" lg="3">
+                @if (TrunksTotal > 0)
                 {
-                    <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
-                        <QueueCard CanToggle="@(QueuesTotal > 3)" Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
-                    </MudItem>
+                    <MudGrid Spacing="1" Class="card-grid-trunks">
+                        @foreach (var Item in GetTrunks())
+                        {
+                            <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
+                                <TrunkCard Card=@Item HandleAvatar="@GetAvatar(Item)"></TrunkCard>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                    <MudDivider Class="my-4" />
                 }
-            </MudGrid>
-        </MudItem>
+                @if (QueuesTotal > 0)
+                {
+                    <MudGrid Spacing="1" Class="card-grid-queues">
+                        @foreach (var Item in GetQueues())
+                        {
+                            <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
+                                <QueueCard CanToggle="@(QueuesTotal > 3)" Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                }
+            </MudItem>
+        }
     </MudGrid>
 </CascadingValue>

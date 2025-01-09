@@ -26,8 +26,17 @@
   display: grid;
   grid-gap: .3rem; }
 
-.events-panel .card {
-  min-width: 150px; }
+.events-panel .card-grid .card {
+  width: 215px;
+  min-width: 150px;
+  max-width: 250px;
+  padding: 4px; }
+  .events-panel .card-grid .card .card-avatar {
+    display: flex;
+    justify-content: center;
+    flex-direction: column; }
+  .events-panel .card-grid .card .card-label-text {
+    white-space: nowrap; }
 
 .events-panel .card[data-state="Unknown"] {
   opacity: 0.5; }

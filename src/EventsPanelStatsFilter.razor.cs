@@ -9,6 +9,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
     public partial class EventsPanelStatsFilter
     {
         [Parameter]
-        public FilteringControl? Filtering { get; set; }
+        [EditorRequired]
+        public FilteringControl Filtering { get; set; } = default!;
     }
 }
