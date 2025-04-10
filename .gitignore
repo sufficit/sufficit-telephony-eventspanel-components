@@ -3,3 +3,4 @@ src/bin/Debug/
 src/bin/
 *.backup
 src/.vs/
+.vs/

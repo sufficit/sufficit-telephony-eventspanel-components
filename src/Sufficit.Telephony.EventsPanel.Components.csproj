@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<TypeScriptRemoveComments>True</TypeScriptRemoveComments>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Configurations>Debug;Release;Packing</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Sufficit Versioning">
