@@ -61,6 +61,10 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
+		<None Include="../.github/copilot-instructions.md">
+			<Pack>False</Pack>
+			<PackagePath></PackagePath>
+		</None>
 		<None Include="compilerconfig.json" />
 	</ItemGroup>
 
