@@ -31,54 +31,54 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string? Animation { get; set; }
 
-        protected string? GetLabelTooltip()
-        {
-            if(Content.Hangup == null)
-            {
-                string label = Monitor.GetChannelLabel(Kind);
-                return Content.Key != label ? Content.Key : null;
-            } 
-            else
-            {
-                return Content.Hangup?.Code + " :: " + Content.Hangup?.Description;
-            }
-        }
+        //protected string? GetLabelTooltip()
+        //{
+        //    if(Content.Hangup == null)
+        //    {
+        //        string label = Monitor.GetChannelLabel(Kind);
+        //        return Content.Key != label ? Content.Key : null;
+        //    } 
+        //    else
+        //    {
+        //        return Content.Hangup?.Code + " :: " + Content.Hangup?.Description;
+        //    }
+        //}
 
-        protected string? GetExtraInfo()
-        {
-            string? info;
-            if (Monitor.IsInitiator)
-            {
-                info = Content.DirectInwardDialing;
-                if(!string.IsNullOrWhiteSpace(info))
-                    info = "DID: " + info;
-            } else
-            {
-                info = Content.OutboundCallerId;
-                if (!string.IsNullOrWhiteSpace(info))
-                    info = "BINA: " + info;
-            }
-            return info;
-        }
+        //protected string? GetExtraInfo()
+        //{
+        //    string? info;
+        //    if (Monitor.IsInitiator)
+        //    {
+        //        info = Content.DirectInwardDialing;
+        //        if(!string.IsNullOrWhiteSpace(info))
+        //            info = "DID: " + info;
+        //    } else
+        //    {
+        //        info = Content.OutboundCallerId;
+        //        if (!string.IsNullOrWhiteSpace(info))
+        //            info = "BINA: " + info;
+        //    }
+        //    return info;
+        //}
 
-        protected string GetIconKey()
-        {
-            Animation = string.Empty;
-            if(Monitor != null)
-            {
-                switch (Content.State)
-                {
-                    case AsteriskChannelState.Up: return EventsPanelDefaults.ICON_STATE_UP;
-                    case AsteriskChannelState.Ringing: return EventsPanelDefaults.ICON_STATE_RINGING;
-                    case AsteriskChannelState.Ring: return EventsPanelDefaults.ICON_STATE_RING;
-                    case AsteriskChannelState.Down: return EventsPanelDefaults.ICON_STATE_DOWN;
-                    case AsteriskChannelState.Dialing: return EventsPanelDefaults.ICON_STATE_DIALING;
-                    case AsteriskChannelState.Busy: return EventsPanelDefaults.ICON_STATE_BUSY;
-                    case AsteriskChannelState.Unknown: return EventsPanelDefaults.ICON_STATE_UNKNOWN;
-                }
-            }
-            return "info";
-        }
+        //protected string GetIconKey()
+        //{
+        //    Animation = string.Empty;
+        //    if(Monitor != null)
+        //    {
+        //        switch (Content.State)
+        //        {
+        //            case AsteriskChannelState.Up: return EventsPanelDefaults.ICON_STATE_UP;
+        //            case AsteriskChannelState.Ringing: return EventsPanelDefaults.ICON_STATE_RINGING;
+        //            case AsteriskChannelState.Ring: return EventsPanelDefaults.ICON_STATE_RING;
+        //            case AsteriskChannelState.Down: return EventsPanelDefaults.ICON_STATE_DOWN;
+        //            case AsteriskChannelState.Dialing: return EventsPanelDefaults.ICON_STATE_DIALING;
+        //            case AsteriskChannelState.Busy: return EventsPanelDefaults.ICON_STATE_BUSY;
+        //            case AsteriskChannelState.Unknown: return EventsPanelDefaults.ICON_STATE_UNKNOWN;
+        //        }
+        //    }
+        //    return "info";
+        //}
 
         protected bool FromQueue => !string.IsNullOrWhiteSpace(Content.Queue);
 
@@ -109,5 +109,16 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
             */
         }
+
+        protected string GetDestinationInfo()
+        {
+            var num = Content.DialedExten ?? Content.ConnectedLineNum ?? Content.Exten;
+            //var name = Content.ConnectedLineName;
+            if (!string.IsNullOrWhiteSpace(num))
+                return $"{num}";
+            return num ?? "Desconhecido";
+        }
+
+        protected bool IsCalling => Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;
     }
 }

@@ -1,38 +1,50 @@
-﻿@inherits EventsPanelCardAbstract<EventsPanelPeerCard>
-<MudPaper Class="card" Style="@GetCardStyle()" data-kind="peer" data-state="@Content?.Status">
-    <MudGrid Spacing="2">
-        <MudItem Class="card-avatar">
+﻿@using Sufficit.Asterisk
+@inherits EventsPanelCardAbstract<EventsPanelPeerCard>
+<MudPaper Class="px-1" Style="@($"{GetCardStyle()} max-width:16rem;")">
+
+
+    <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
             <MudTooltip Text="@PeerKey">
-                <MudAvatar Size="Size.Small">
-                    <MudImage Src="@GetAvatarSrc()"></MudImage>
+                <MudAvatar Size="Size.Small" Class="mt-1" style="width: 1.5rem; height: 1.5rem;">
+                    <MudImage Src="@GetAvatarSrc()" style="display: block; margin: 0px; padding:0px" />
                 </MudAvatar>
             </MudTooltip>
-        </MudItem>
-        <MudItem Class="card-label">
-            <MudTooltip Text="@Card.Label" Class="card-label-tooltip">
-                <MudText Typo="Typo.body2" Class="card-label-text">@GetLabel()</MudText>
-             </MudTooltip>
-        </MudItem>
-        <MudItem Class="d-flex justify-center align-center">
-            @if (@Card.IsMonitored && @Content?.Address != null)
+
+            <MudTooltip Text="@Card.Label">
+                <MudText style="font-size: 0.9rem; margin: 0px; padding:0px">
+                    @GetLabel()
+                </MudText>
+            </MudTooltip>
+        </MudStack>
+
+        <MudSpacer />
+
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="1">
+            @if (Card.IsMonitored && Content?.Address is not null)
             {
-                <MudTooltip Text="@Content?.Address">
-                    <MudIcon Icon="@Icons.Material.Filled.Place" Size="Size.Small" Color="Color.Warning"></MudIcon>
+                <MudTooltip Text="@Content.Address">
+                    <MudIcon Icon="@Icons.Material.Filled.Place"
+                             Size="Size.Small"
+                             Color="Color.Warning"
+                             style="font-size: 1.2rem;" />
                 </MudTooltip>
             }
-            <MudTooltip Text="@Convert.ToString(@Content?.Status)">
-                <MudIcon Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Color="Color.Warning"></MudIcon>
+
+            <MudTooltip Text="@Convert.ToString(Content?.Status)">
+                <MudIcon Icon="@Icons.Material.Filled.Visibility"
+                         Size="Size.Small"
+                         Color="Color.Warning"
+                         style="font-size: 1.2rem;" />
             </MudTooltip>
-        </MudItem>
-    </MudGrid>
-    
+        </MudStack>
+
+    </MudStack>
+
     @if (Card.Channels.Any())
     {
-        <MudDivider Class="my-1"/>
-        <MudGrid>
-            <MudStack AlignItems="AlignItems.Center">
-                <CardChannels Channels=@Card.Channels Kind="@EventsPanelCardKind.PEER"></CardChannels>
-            </MudStack>
-        </MudGrid>
+        <MudDivider Class="my-1" />
+        <CardChannels Channels=@Card.Channels Kind="@EventsPanelCardKind.PEER"></CardChannels>
     }
 </MudPaper>

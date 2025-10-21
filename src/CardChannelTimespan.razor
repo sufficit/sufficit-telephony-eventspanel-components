@@ -1,6 +1,6 @@
 ﻿@using Sufficit.Telephony.EventsPanel
 @using System.Threading
-<small class="text-xs">@GetTimeSpan()</small>
+<MudText Typo="Typo.caption" style="font-size: 0.7rem;">@GetTimeSpan()</MudText>
 @code{
     [Parameter]
     public ChannelInfo? Channel { get; set; }

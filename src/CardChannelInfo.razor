@@ -1,29 +1,10 @@
-﻿<MudLink OnClick="OnChannelClick">
-    <div class="card-channel row m-0 text-nowrap" data-hangup="@Content.Hangup?.Description" data-initiator="@Monitor.IsInitiator" data-direction="@Content.Direction" data-lastupdate="@DateTime.Now">
-        <div class="card-channel-actions col-2 px-2">
-            <HyperText CssClass="cursor-pointer" data-tooltip="@Content.State" data-state="@Content.State">  
-                <Icon Key="@GetIconKey()" Size="Sufficit.Blazor.UI.Material.ComponentSize.Small"></Icon>
-            </HyperText>
-            @if (!string.IsNullOrWhiteSpace(GetExtraInfo()))
-            {
-                <HyperText CssClass="cursor-pointer" data-tooltip="@GetExtraInfo()" data-did="@Content.DirectInwardDialing" data-outcallid="@Content.OutboundCallerId">                
-                    <Icon Key="info" Size="Sufficit.Blazor.UI.Material.ComponentSize.Small"></Icon>
-                </HyperText>
-            }
-            @if (FromQueue)
-            {
-                <HyperText CssClass="cursor-pointer" data-tooltip="@Queue">                
-                    <Icon Key="question" Size="Sufficit.Blazor.UI.Material.ComponentSize.Small"></Icon>
-                </HyperText>
-            }
-        </div> 
-        <div class="col-7 px-1 cursor-pointer" data-tooltip="@GetLabelTooltip()">
-            <span class="d-block text-truncate">
-                <small class="text-xs">@Monitor.GetChannelLabel(Kind)</small>        
-            </span>   
-        </div>   
-        <div class="col-3 text-end">            
-            <CardChannelTimespan Channel="@Content"></CardChannelTimespan>
-        </div>
-    </div>
-</MudLink>
+﻿<MudStack  Row AlignItems="AlignItems.Center"  Class="px-1 pb-1">
+    <MudStack AlignItems="AlignItems.Center" Row Spacing="2">
+        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Call" style="font-size: 1rem;" />
+        <MudText style="font-size: 0.85rem;" Typo="Typo.caption">@GetDestinationInfo()</MudText>
+    </MudStack>
+    <MudSpacer/>
+    <MudStack>
+        <CardChannelTimespan Channel="@Content"></CardChannelTimespan>
+    </MudStack>
+</MudStack>
