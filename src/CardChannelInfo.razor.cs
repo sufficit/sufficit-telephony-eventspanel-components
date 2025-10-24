@@ -26,7 +26,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
             }
         }
 
-        private async void ChannelOnChanged(IMonitor? sender, object? state) 
+        private async void ChannelOnChanged(IMonitor? sender, object? state)
             => await InvokeAsync(StateHasChanged);
 
         protected string? Animation { get; set; }
@@ -117,6 +117,78 @@ namespace Sufficit.Telephony.EventsPanel.Components
             if (!string.IsNullOrWhiteSpace(num))
                 return $"{num}";
             return num ?? "Desconhecido";
+        }
+
+
+        /// <summary>
+        /// Gets the CSS class for the channel text based on call state
+        /// </summary>
+        protected string GetChannelTextClass()
+        {
+            var classes = new List<string>();
+
+            if (Content?.Hangup != null)
+            {
+                classes.Add("channel-hangup");
+            }
+            else
+            {
+                classes.Add("channel-active");
+
+                // Add state-specific classes for active calls
+                switch (Content?.State)
+                {
+                    case AsteriskChannelState.Ringing:
+                    case AsteriskChannelState.Ring:
+                        classes.Add("channel-ringing");
+                        break;
+                    case AsteriskChannelState.Busy:
+                        classes.Add("channel-busy");
+                        break;
+                    case AsteriskChannelState.Up:
+                        classes.Add("channel-up");
+                        break;
+                    case AsteriskChannelState.Dialing:
+                    case AsteriskChannelState.DialingOffhook:
+                        classes.Add("channel-connecting");
+                        break;
+                }
+            }
+
+            return string.Join(" ", classes);
+        }
+
+        /// <summary>
+        /// Gets the CSS class for the channel icon based on call state
+        /// </summary>
+        protected string GetChannelIconClass()
+        {
+            var classes = new List<string> { "channel-icon" };
+
+            if (Content?.Hangup != null)
+            {
+                classes.Add("channel-icon--hangup");
+            }
+            else
+            {
+                switch (Content?.State)
+                {
+                    case AsteriskChannelState.Ringing:
+                    case AsteriskChannelState.Ring:
+                        classes.Add("channel-icon--ringing");
+                        break;
+                    case AsteriskChannelState.Busy:
+                        classes.Add("channel-icon--busy");
+                        break;
+                    case AsteriskChannelState.Up:
+                    case AsteriskChannelState.Dialing:
+                    case AsteriskChannelState.DialingOffhook:
+                        classes.Add("channel-icon--active");
+                        break;
+                }
+            }
+
+            return string.Join(" ", classes);
         }
 
         protected bool IsCalling => Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;

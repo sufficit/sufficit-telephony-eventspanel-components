@@ -8,6 +8,8 @@ namespace Sufficit.Telephony.EventsPanel.Components
     {
         protected PeerInfo? Content => Card.Monitor?.Content;
 
+
+        
         protected string? PeerKey
         {
             get
@@ -23,7 +25,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string GetCardStyle()
         {
-
+           
 
             // Verifica se há canais chamando
             bool hasCallingChannel = Card.Channels.Any(monitor => IsChannelCalling(monitor));
