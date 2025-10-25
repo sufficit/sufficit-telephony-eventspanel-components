@@ -7,13 +7,13 @@
 
         <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
             <MudTooltip Text="@PeerKey">
-                <MudAvatar Size="Size.Small" Class="mt-1" style="width: 1.5rem; height: 1.5rem;">
-                    <MudImage Src="@GetAvatarSrc()" style="display: block; margin: 0px; padding:0px" />
+                <MudAvatar Size="Size.Small" Class="mt-1 peer-avatar">
+                    <MudImage Src="@GetAvatarSrc()"/>
                 </MudAvatar>
             </MudTooltip>
 
             <MudTooltip Text="@Card.Label">
-                <MudText style="font-size: 0.9rem; margin: 0px; padding:0px">
+                <MudText Class="peer-label">
                     @GetLabel()
                 </MudText>
             </MudTooltip>
@@ -28,7 +28,7 @@
                     <MudIcon Icon="@Icons.Material.Filled.Place"
                              Size="Size.Small"
                              Color="Color.Warning"
-                             style="font-size: 1.2rem;" />
+                             Class="peer-icon" />
                 </MudTooltip>
             }
 
@@ -36,7 +36,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Visibility"
                          Size="Size.Small"
                          Color="Color.Warning"
-                         style="font-size: 1.2rem;" />
+                         Class="peer-icon" />
             </MudTooltip>
         </MudStack>
 
