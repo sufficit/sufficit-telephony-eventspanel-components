@@ -1,6 +1,6 @@
 ﻿@using Sufficit.Telephony.EventsPanel
 @using System.Threading
-<MudText Typo="Typo.caption" Class="@GetTimespanClass()">@GetTimeSpan()</MudText>
+<MudText Typo="Typo.caption" Class="channel-TimeSpan">@GetTimeSpan()</MudText>
 @code{
     [Parameter]
     public ChannelInfo? Channel { get; set; }
@@ -18,21 +18,21 @@
         return string.Empty;
     }
 
-    protected string GetTimespanClass()
-    {
-        var classes = new List<string> { "channel-timespan" };
+    // protected string GetTimespanClass()
+    // {
+    //     var classes = new List<string> { "channel-timespan" };
 
-        if (Channel?.Hangup != null)
-        {
-            classes.Add("channel-timespan--ended");
-        }
-        else
-        {
-            classes.Add("channel-timespan--active");
-        }
+    //     if (Channel?.Hangup != null)
+    //     {
+    //         classes.Add("channel-timespan--ended");
+    //     }
+    //     else
+    //     {
+    //         classes.Add("channel-timespan--active");
+    //     }
 
-        return string.Join(" ", classes);
-    }
+    //     return string.Join(" ", classes);
+    // }
 
     protected Timer? aTimer;
 

@@ -26,6 +26,10 @@
     font-size: 0.75rem !important;
 }
 
+.channel-TimeSpan {
+    font-size: 0.72rem !important;
+}
+
 
 
 .events-monitor .card {
@@ -162,4 +166,20 @@
 
 .card-trunks .card-channel[data-initiator] .card-channel-actions [data-state] {
     color: green;
+}
+
+.peer-calling {
+    background: rgba(var(--mud-palette-primary-rgb), 0.2) !important;
+}
+
+.peer-registered {
+    background: rgba(var(--mud-palette-success-rgb), 0.2) !important;
+}
+
+.peer-unknown {
+    opacity: 0.5 !important;
+}
+
+.peer-unregistered {
+    background: rgba(0, 0, 0, 0.1) !important;
 }

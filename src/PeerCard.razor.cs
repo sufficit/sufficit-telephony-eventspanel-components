@@ -23,23 +23,21 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected string GetLabel() => !string.IsNullOrWhiteSpace(Card.Label) ? Card.Label : PeerKey ?? "Desconhecido";
 
-        protected string GetCardStyle()
+        protected string GetCardClass()
         {
-           
-
             // Verifica se há canais chamando
             bool hasCallingChannel = Card.Channels.Any(monitor => IsChannelCalling(monitor));
 
             if (hasCallingChannel)
-                return "background: rgba(var(--mud-palette-secondary-rgb), 0.2); ";
+                return "peer-calling";
 
             if (Content?.Status == PeerStatus.Registered)
-                return "background: rgba(var(--mud-palette-success-rgb), 0.2); ";
+                return "peer-registered";
   
             else if (Content?.Status == PeerStatus.Unknown)
-                return "opacity: .5;";
+                return "peer-unknown";
             else if (Content?.Status == PeerStatus.Unregistered)
-                return string.Empty;
+                return "peer-unregistered";
 
             return "";
         }
