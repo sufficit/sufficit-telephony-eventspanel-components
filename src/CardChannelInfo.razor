@@ -1,10 +1,12 @@
-﻿<MudStack Row AlignItems="AlignItems.Center" Class="px-1 pb-1">
-    <MudStack AlignItems="AlignItems.Center" Row Spacing="2">
-        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Call" Class="channel-icon" />
-        <MudText Class="@($"{GetChannelTextClass()} channel-label")" Typo="Typo.caption">@GetDestinationInfo()</MudText>
+﻿<MudPaper Class="@GetCardChannelClass()" Elevation="0" Style="background-color: transparent;">
+    <MudStack Row>
+        <MudStack AlignItems="AlignItems.Center" Row Spacing="2">
+            <MudIcon Size="Size.Small" Icon="@GetIcon()" Class="channel-icon" />
+            <MudText Class="@($"{GetChannelTextClass()} channel-label")" Typo="Typo.caption">@GetDestinationInfo()</MudText>
+        </MudStack>
+        <MudSpacer />
+        <MudStack>
+            <CardChannelTimespan Channel="@Content"></CardChannelTimespan>
+        </MudStack>
     </MudStack>
-    <MudSpacer />
-    <MudStack>
-        <CardChannelTimespan Channel="@Content"></CardChannelTimespan>
-    </MudStack>
-</MudStack>
+</MudPaper>

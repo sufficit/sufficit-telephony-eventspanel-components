@@ -25,7 +25,30 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public FilteringControl? Filtering { get; set; }
 
-        protected bool OnlyPeers => Cards.OnlyPeers.GetValueOrDefault() ? true : (TrunksTotal == 0 && QueuesTotal == 0);
+        // Estado de expansão das filas - inicializa como true (expandido)
+        protected bool QueuesExpanded { get; set; } = true;
+
+        // Calcula dinamicamente baseado nas coleções reais
+        protected bool OnlyPeers
+        {
+            get
+            {
+                if (Cards.OnlyPeers.GetValueOrDefault())
+                    return true;
+
+                // Calcula os totais reais da coleção
+                var queuesCount = Cards.Queues.Count();
+                var trunksCount = Cards.Trunks.Count();
+
+                return queuesCount == 0 && trunksCount == 0;
+            }
+        }
+
+        protected int QueuesTotal;
+        protected int TrunksTotal;
+        
+        private IEnumerable<EventsPanelQueueCard>? _cachedQueues;
+        private IEnumerable<EventsPanelTrunkCard>? _cachedTrunks;
 
         protected override void OnParametersSet()
         {
@@ -38,6 +61,20 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
             if (Filtering != null)
                 Filtering.OnFilterChanged += OnFilteringChanged;
+
+            // Calculate counts before rendering
+            UpdateCachedCollections();
+        }
+
+        private void UpdateCachedCollections()
+        {
+            // Cache queues and calculate total
+            _cachedQueues = CalculateQueues();
+            QueuesTotal = _cachedQueues.Count();
+
+            // Cache trunks and calculate total
+            _cachedTrunks = CalculateTrunks();
+            TrunksTotal = _cachedTrunks.Count();
         }
 
         public override void Dispose(bool disposing)
@@ -50,14 +87,20 @@ namespace Sufficit.Telephony.EventsPanel.Components
         }
 
         protected void OnCardsChanged(EventsPanelCard? _, NotifyCollectionChangedAction __)
-            => ShouldRefresh();
+        {
+            UpdateCachedCollections();
+            ShouldRefresh();
+        }
 
         protected async void OnPaggingChanged(IPagging? _)
             => await InvokeAsync(StateHasChanged);
 
         protected async void OnFilteringChanged(string? _)
-            => await InvokeAsync(StateHasChanged);
-                                        
+        {
+            UpdateCachedCollections();
+            await InvokeAsync(StateHasChanged);
+        }
+    
         protected async Task<string> GetAvatar(EventsPanelCard monitor)
         {
             if (Cards?.CardAvatarHandler != null)            
@@ -82,30 +125,53 @@ namespace Sufficit.Telephony.EventsPanel.Components
                 return peers;            
         }
 
-        protected int QueuesTotal;
-        protected IEnumerable<EventsPanelQueueCard> GetQueues()
+        private IEnumerable<EventsPanelQueueCard> CalculateQueues()
         {
             string? filter = Filtering?.FilterText;
             Func<EventsPanelQueueCard, bool>? whereClause = (_) => true;
             if (!string.IsNullOrWhiteSpace(filter))
                 whereClause = (EventsPanelQueueCard s) => s.IsMatchFilter(filter);
 
-            var result = Cards.Queues.Where(whereClause);
-            QueuesTotal = result.Count();
+            var queues = Cards.Queues.Where(whereClause);
+    
+            return queues;
+        }
+
+        protected IEnumerable<EventsPanelQueueCard> GetQueues()
+        {
+         // Return cached collection
+            return _cachedQueues ?? Enumerable.Empty<EventsPanelQueueCard>();
+        }
+
+        private IEnumerable<EventsPanelTrunkCard> CalculateTrunks()
+        {
+  string? filter = Filtering?.FilterText;
+  Func<EventsPanelTrunkCard, bool>? whereClause = (_) => true;
+  if (!string.IsNullOrWhiteSpace(filter))
+        whereClause = (EventsPanelTrunkCard s) => s.IsMatchFilter(filter);
+
+  var result = Cards.Trunks.Where(whereClause).OrderBy(s => s.Info.Order).ThenBy(s => s.Info.Label);
             return result;
         }
 
-        protected int TrunksTotal;
-        protected IEnumerable<EventsPanelTrunkCard> GetTrunks()
+    protected IEnumerable<EventsPanelTrunkCard> GetTrunks()
         {
-            string? filter = Filtering?.FilterText;
-            Func<EventsPanelTrunkCard, bool>? whereClause = (_) => true;
-            if (!string.IsNullOrWhiteSpace(filter))
-                whereClause = (EventsPanelTrunkCard s) => s.IsMatchFilter(filter);
+            // Return cached collection
+            return _cachedTrunks ?? Enumerable.Empty<EventsPanelTrunkCard>();
+        }
 
-            var result = Cards.Trunks.Where(whereClause).OrderBy(s => s.Info.Order).ThenBy(s => s.Info.Label);
-            TrunksTotal = result.Count();
-            return result;
+        // Método para alternar expansão/colapso
+        protected void ToggleQueues()
+        {
+            QueuesExpanded = !QueuesExpanded;
+        }
+
+        // Retorna o estilo do card de filas baseado no estado de expansão
+        protected string GetQueuesCardStyle()
+        {
+            return QueuesExpanded 
+                ? "padding-bottom: 0.5rem !important;" 
+                : "padding-bottom: 0.25rem !important;";
         }
     }
 }

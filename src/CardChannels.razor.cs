@@ -12,6 +12,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
         [Parameter]
         public ChannelInfoCollection? Channels { get; set; }
 
+        [Parameter]
+        public string? ClientCode { get; set; }
+
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();

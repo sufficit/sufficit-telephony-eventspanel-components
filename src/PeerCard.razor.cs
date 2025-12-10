@@ -45,7 +45,23 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected bool IsChannelCalling(ChannelInfoMonitor monitor)
         {
             var content = monitor.GetContent();
-            return content?.State is AsteriskChannelState.Down;
+            
+            // Um canal está em chamada se:
+            // 1. Não foi desligado (Hangup == null)
+            // 2. Está em um estado ativo (Up, Ringing, Dialing, Busy, etc.)
+            if (content?.Hangup != null)
+                return false;
+
+            return content?.State is 
+                AsteriskChannelState.Up or 
+                AsteriskChannelState.Ringing or 
+                AsteriskChannelState.Ring or 
+                AsteriskChannelState.Dialing or 
+                AsteriskChannelState.Busy or 
+                AsteriskChannelState.DialingOffhook or 
+                AsteriskChannelState.OffHook or 
+                AsteriskChannelState.PreRing or
+                AsteriskChannelState.Down;
         }
     }
 }

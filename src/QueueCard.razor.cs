@@ -69,15 +69,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected void OnToggleClicked(MouseEventArgs _)
             => Toggle();
 
-        protected String GetCardStyle()
-        {
-            string val = "width: 233.6px; background: rgba(180,240,255,.1);";
-
-            if (Card.Channels.Any()) { }
-
-            if (Card.IsMonitored) { }
-
-            return val;
-        }
+      
     }
 }

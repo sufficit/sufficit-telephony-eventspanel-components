@@ -20,8 +20,7 @@
             }
 
             @if (Panel.HasCards())
-            {
-                <MudDivider Class="my-1"></MudDivider>
+            {    
                 <EventsPanelCardArea Cards="Panel.Cards" Pagging="Pagging" Filtering="Filtering"></EventsPanelCardArea>
             }
         </EventsPanelViewRefresh>        

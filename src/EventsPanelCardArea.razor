@@ -7,23 +7,22 @@
             <EventsPanelCardsOptions Pagging="@Pagging" Total="Pagging.PageTotalItems"></EventsPanelCardsOptions>
         </PaggingContext>
     }
-    <MudGrid> 
-        <MudItem xs="12">
-                <MudStack Row Class="flex-wrap" Spacing="2" AlignItems="AlignItems.Start">
-                    @foreach (var Item in GetPeers())
-                    {
-                        <PeerCard Card=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
-                    }
-                </MudStack>         
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="@(OnlyPeers ? 12 : 8)" lg="@(OnlyPeers ? 12 : 9)">
+            <MudStack Row Class="flex-wrap" Spacing="2" AlignItems="AlignItems.Start">
+                @foreach (var Item in GetPeers())
+                {
+                    <PeerCard Card=@Item HandleAvatar="@GetAvatar(Item)"></PeerCard>
+                }
+            </MudStack>
         </MudItem>
 
-
-    @*     @if (!OnlyPeers)
+        @if (!OnlyPeers)
         {
             <MudItem xs="12" sm="12" md="4" lg="3">
-                @if (TrunksTotal > 0)
+                @* @if (TrunksTotal > 0)
                 {
-                    <MudGrid Spacing="1" Class="card-grid-trunks">
+                    <MudGrid Spacing="1" Class="card-grid-trunks my-4">
                         @foreach (var Item in GetTrunks())
                         {
                             <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
@@ -31,22 +30,38 @@
                             </MudItem>
                         }
                     </MudGrid>
-                    <MudDivider Class="my-4" />
-                }
+                } *@
                 @if (QueuesTotal > 0)
                 {
-                    <MudGrid Spacing="1" Class="card-grid-queues">
-                        @foreach (var Item in GetQueues())
-                        {
-                            <MudItem xs="12" sm="6" md="12" Class="d-flex justify-center">
-                                <QueueCard CanToggle="@(QueuesTotal > 3)" Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
-                            </MudItem>
-                        }
-                    </MudGrid>
+                    <MudPaper Class="pa-2 mb-2" Style="@GetQueuesCardStyle()">
+                        <MudStack Spacing="@(QueuesExpanded ? 2 : 0)">
+                            <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                <MudStack Class="ms-2" Row AlignItems="AlignItems.Center" Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.DensityMedium" Size="Size.Small" />
+                                    <MudText Typo="Typo.subtitle1">Filas</MudText>
+                                </MudStack>
+                                <MudTooltip Text="@(QueuesExpanded ? "Ocultar filas" : "Mostrar filas")">
+                                    <MudIconButton Icon="@(QueuesExpanded? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)"
+                                                   OnClick="ToggleQueues"
+                                                   Size="Size.Small" />
+                                </MudTooltip>
+                            </MudStack>
+
+
+                            <MudCollapse Expanded="@QueuesExpanded">
+                                <MudGrid Spacing="1" Class="card-grid-queues py-1">
+                                    @foreach (var Item in GetQueues())
+                                    {
+                                        <MudItem xs="12" sm="6" md="12">
+                                            <QueueCard CanToggle="@(QueuesTotal > 3)" Card=@Item HandleAvatar="@GetAvatar(Item)"></QueueCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudCollapse>
+                        </MudStack>
+                    </MudPaper>
                 }
             </MudItem>
-        } *@
-
-
+        }
     </MudGrid>
 </CascadingValue>

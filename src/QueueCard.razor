@@ -1,19 +1,20 @@
 ﻿@inherits EventsPanelCardAbstract<EventsPanelQueueCard>
-<MudPaper Class="pa-1 align-self-center" Style="@GetCardStyle()">
+<MudPaper Class="pa-1">
+
     <MudGrid Spacing="2">
-        <MudItem xs="2" sm="2" md="2" Class="d-flex flex-column justify-center">
+        <MudItem xs="2" sm="2" md="2" Class="d-flex flex-column align-self-center justify-center">
             <MudTooltip Text="@Content!.Key">
-                <MudAvatar Size="Size.Small">
+                <MudAvatar Size="Size.Small" Class="queue-avatar">
                     <MudImage Src="@GetAvatarSrc()"></MudImage>
                 </MudAvatar>
             </MudTooltip>
         </MudItem>
-        <MudItem xs="8" sm="8" md="8">
+        <MudItem xs="8" sm="8" md="8" Class="d-flex align-items-center">
             @if (Card.IsMonitored)
             {
-                <MudText Typo="Typo.body2" Style="line-height: 32px">
+                <MudText Class="queue-label">
                     @Card.Label
-                     ::
+                    ::
                     <MudTooltip Text="Agentes">
                         @Content!.Agents.Count
                     </MudTooltip>
@@ -25,17 +26,16 @@
             }
             else
             {
-                <MudText Typo="Typo.body2" Style="line-height: 32px">
+                <MudText Class="queue-label">
                     @Card.Label
                 </MudText>
             }
         </MudItem>
         <MudItem xs="2" sm="2" md="2" Class="d-flex justify-end align-self-center">
-           @if (CanToggle)
+            @if (CanToggle)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.SupportAgent" Size="Size.Small" OnClick="OnToggleClicked" ></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.SupportAgent" Size="Size.Small" OnClick="OnToggleClicked"></MudIconButton>
             }
-            <MudIconButton Icon="@Icons.Material.Filled.Refresh" Size="Size.Small" OnClick="OnRefreshClicked"></MudIconButton>
         </MudItem>
     </MudGrid>
 
@@ -43,19 +43,16 @@
     {
         <CascadingValue Value="this">
             <MudDivider></MudDivider>
-            <MudStack AlignItems="AlignItems.Center">
-                <QueueCardAgents Items=@Content!.Agents></QueueCardAgents>
+            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                <QueueCardAgents Items=@Content!.Agents ClientCode="@Card.Label"></QueueCardAgents>
             </MudStack>
         </CascadingValue>
     }
 
     @if (Card.Channels.Any())
     {
-        <MudDivider Class="my-1" />
-        <MudGrid>
-            <MudStack AlignItems="AlignItems.Center">
-                <CardChannels Channels=@Card.Channels Kind="@EventsPanelCardKind.PEER"></CardChannels>
-            </MudStack>
-        </MudGrid>
+        <MudDivider Class="" />
+        <CardChannels Channels=@Card.Channels Kind="@EventsPanelCardKind.QUEUE" ClientCode="@Card.Label"></CardChannels>
     }
+
 </MudPaper>

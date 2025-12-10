@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
 using Sufficit.Asterisk;
 using Sufficit.Telephony.EventsPanel;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         [CascadingParameter]
         public EventsPanelCardKind Kind { get; set; }
+
+        [CascadingParameter(Name = "ClientCode")]
+        public string? ClientCode { get; set; }
 
         protected ChannelInfo Content => Monitor.GetContent()!;
 
@@ -113,12 +117,37 @@ namespace Sufficit.Telephony.EventsPanel.Components
         protected string GetDestinationInfo()
         {
             var num = Content.DialedExten ?? Content.ConnectedLineNum ?? Content.Exten;
-            //var name = Content.ConnectedLineName;
-            if (!string.IsNullOrWhiteSpace(num))
-                return $"{num}";
-            return num ?? "Desconhecido";
+
+            if (string.IsNullOrWhiteSpace(num))
+                return "Desconhecido";
+
+            // If this is a queue card and we have a client code, format the number
+            if (Kind == EventsPanelCardKind.QUEUE && !string.IsNullOrWhiteSpace(ClientCode))
+            {
+                return FormatNumberWithClientCode(num);
+            }
+
+            return num;
         }
 
+        /// <summary>
+        /// Formats phone number by removing client code prefix if present (for queue cards)
+        /// </summary>
+        private string FormatNumberWithClientCode(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number) || string.IsNullOrWhiteSpace(ClientCode))
+                return number;
+
+            // Check if the number starts with the client code
+            if (number.StartsWith(ClientCode, StringComparison.OrdinalIgnoreCase))
+            {
+                // Remove the client code prefix
+                return number.Substring(ClientCode.Length);
+            }
+
+            // Return original number if no match
+            return number;
+        }
 
         /// <summary>
         /// Gets the CSS class for the channel text based on call state
@@ -127,14 +156,80 @@ namespace Sufficit.Telephony.EventsPanel.Components
         {
             var classes = new List<string>();
 
+            // Add hangup class only when the call has actually ended
             if (Content?.Hangup != null)
                 classes.Add("channel-hangup");
-           
+
+            // Add class to indicate channel is on hold
+            if (Content?.OnHold == true)
+                classes.Add("channel-onhold");
+
+            // Add class to indicate the channel came from a queue (visual indicator only)
+
+
             return string.Join(" ", classes);
         }
 
- 
 
-        protected bool IsCalling => Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;
+
+        protected bool IsCalling => Content?.Hangup == null && Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;
+
+        /// <summary>
+        /// Gets the icon color based on channel state
+        /// </summary>
+        protected MudBlazor.Color GetIconColor()
+        {
+            // Channel ended
+            if (Content?.Hangup != null)
+                return MudBlazor.Color.Default;
+
+            // Channel on hold
+            if (Content?.OnHold == true)
+                return MudBlazor.Color.Warning;
+
+            // Active call states
+            if (Content?.State is AsteriskChannelState.Up)
+                return MudBlazor.Color.Success;
+
+            if (Content?.State is AsteriskChannelState.Ringing or AsteriskChannelState.Ring)
+                return MudBlazor.Color.Info;
+
+            if (Content?.State is AsteriskChannelState.Dialing or AsteriskChannelState.DialingOffhook)
+                return MudBlazor.Color.Primary;
+
+            if (Content?.State is AsteriskChannelState.Busy)
+                return MudBlazor.Color.Error;
+
+            // Default for other states
+            return MudBlazor.Color.Default;
+        }
+
+        /// <summary>
+        /// Gets the icon based on channel state
+        /// </summary>
+        protected string GetIcon()
+        {
+            if (Content?.Hangup != null)
+                return Icons.Material.Filled.CallEnd;
+
+            if (Content?.OnHold == true)
+                return Icons.Material.Filled.Pause;
+
+            if (Content?.State is AsteriskChannelState.Ringing or AsteriskChannelState.Ring)
+                return Icons.Material.Filled.PhoneCallback;
+
+            if (Content?.State is AsteriskChannelState.Dialing or AsteriskChannelState.DialingOffhook)
+                return Icons.Material.Filled.PhoneForwarded;
+
+            return Icons.Material.Filled.Call;
+        }
+
+        protected string GetCardChannelClass()
+        {
+            if (Kind == EventsPanelCardKind.QUEUE)
+                return "px-2 py-1";
+
+            return "px-1 pb-1";
+        }
     }
 }

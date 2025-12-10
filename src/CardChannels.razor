@@ -1,7 +1,11 @@
-﻿@if(Channels != null){
+﻿@if (Channels != null)
+{
     <CascadingValue Value="@Kind">
-        @foreach(var Channel in @Channels) {
-                <CardChannelInfo Monitor="@Channel"></CardChannelInfo>       
-        }
+        <CascadingValue Value="@ClientCode" Name="ClientCode">
+            @foreach (var Channel in @Channels)
+            {
+                <CardChannelInfo Monitor="@Channel"></CardChannelInfo>
+            }
+        </CascadingValue>
     </CascadingValue>
 }
