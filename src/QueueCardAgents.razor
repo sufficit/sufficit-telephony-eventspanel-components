@@ -4,46 +4,46 @@
 {
     @foreach (var item in Items)
     {
-      <MudStack Row="true"
-     Spacing="1"
-          AlignItems="AlignItems.Center"
-              Class="@($"px-1 py-1 {GetAgentCardClass(item)}")" Style="width:100%">
+        <MudStack Row="true"
+                  Spacing="1"
+                  AlignItems="AlignItems.Center"
+                  Class="@($"px-1 py-1 {GetAgentCardClass(item)}")" Style="width:100%">
 
             @* Status Icon *@
             <MudTooltip Text="@GetStatusTooltip(item)">
-      <MudIconButton Icon="@GetAgentStatusIcon(item)"
-    Color="@GetAgentStatusColor(item)"
-               Size="Size.Small"
-           Class="agent-icon"
-       Style="cursor: pointer;" />
-    </MudTooltip>
+                <MudIconButton Icon="@GetAgentStatusIcon(item)"
+                               Color="@GetAgentStatusColor(item)"
+                               Size="Size.Small"
+                               Class="agent-icon"
+                               Style="cursor: pointer;" />
+            </MudTooltip>
 
-        @* Agent Name *@
+            @* Agent Name *@
             <MudStack Spacing="0" Justify="Justify.Center" Style="flex: 1; min-width: 0;">
-              <MudTooltip Text="@item.Interface">
-        <MudText Class="agent-label text-truncate">
-      @FormatAgentDisplay(item)
-          @if (item.InCall)
-        {
- <MudText Class="agent-label" Inline="true" Color="Color.Warning" Style="font-weight: bold;"> (Em chamada)</MudText>
-          }
-        else if (item.Paused)
-{
-          <MudText Class="agent-label" Inline="true" Color="Color.Error"> (Pausado@(!string.IsNullOrWhiteSpace(item.PausedReason) ? $": {item.PausedReason}" : ""))</MudText>
-  }
-            </MudText>
-    </MudTooltip>
+                <MudTooltip Text="@item.Interface">
+                    <MudText Class="agent-label text-truncate">
+                        @FormatAgentDisplay(item)
+                        @if (item.InCall)
+                        {
+                            <MudText Class="agent-label" Inline="true" Color="Color.Warning" Style="font-weight: bold;"> (Em chamada)</MudText>
+                        }
+                        else if (item.Paused)
+                        {
+                            <MudText Class="agent-label" Inline="true" Color="Color.Error"> (Pausado@(!string.IsNullOrWhiteSpace(item.PausedReason) ? $": {item.PausedReason}" : ""))</MudText>
+                        }
+                    </MudText>
+                </MudTooltip>
             </MudStack>
 
-      @* Call Duration (if InCall or InUse) - SAME STYLE AS PEER *@
-        @if (item.InCall || item.Status == AsteriskDeviceStatus.InUse)
-         {
-       <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
-  <MudText Typo="Typo.caption" Class="channel-TimeSpan">
-              @GetCallDuration(item)
-         </MudText>
-             </MudStack>
-  }
+            @* Call Duration (if InCall or InUse) - SAME STYLE AS PEER *@
+            @if (item.InCall || item.Status == AsteriskDeviceStatus.InUse)
+            {
+                <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+                    <MudText Typo="Typo.caption" Class="channel-TimeSpan">
+                        @GetCallDuration(item)
+                    </MudText>
+                </MudStack>
+            }
         </MudStack>
     }
 }
