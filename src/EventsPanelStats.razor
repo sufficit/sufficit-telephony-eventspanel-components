@@ -6,8 +6,9 @@
             IsStateCard
             Count="@Convert.ToInt32(@ViewRefreshComponent?.RefreshRate ?? 0)"
             Title="@Service.State?.ToString()"
-                              IconName="@Icons.Material.Filled.Refresh"
+            IconName="@Icons.Material.Filled.Refresh"
             IsServiceTrying="@Service.IsTrying"
+            IsConnected="@Service.IsConnected"
             OnClick="Refresh"
         >
         </EventsPanelStatsCard>

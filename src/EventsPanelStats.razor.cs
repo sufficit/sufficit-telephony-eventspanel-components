@@ -39,8 +39,18 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         protected async Task Refresh()
         {
-            if(Service != null && Service.IsConnected)
+            // Se não está conectado, inicia a conexão
+            if (Service != null && !Service.IsConnected)
+            {
+                await Service.StartAsync(System.Threading.CancellationToken.None).ConfigureAwait(false);
+                await Task.Delay(200);
+                await InvokeAsync(StateHasChanged);
+            }
+            // Se já está conectado, atualiza os dados
+            else if (Service != null && Service.IsConnected)
+            {
                 await Service.GetPeerStatus();
+            }
         }
 
         protected int MaxButtons => Panel.Options?.MaxButtons ?? 0;

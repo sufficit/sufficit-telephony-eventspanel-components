@@ -3,10 +3,10 @@
 <MudPaper Class="flex-column pa-3">
     <MudStack Row="true" Justify="Justify.SpaceBetween">
         <MudTooltip Text="@ToolTip">
-            <MudPaper Class="d-flex align-center mt-n5 pa-3 mud-theme-dark cursor-pointer" @onclick="Click">
-                @if(IsServiceTrying)
+            <MudPaper Class="@GetIconClass()" @onclick="Click">
+                @if (IsServiceTrying)
                 {
-                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="color: whitesmoke"/>
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Style="color: whitesmoke" />
                 }
                 else
                 {
@@ -15,7 +15,7 @@
             </MudPaper>
         </MudTooltip>
         <MudText Typo="Typo.h5" Style="font-weight: bold">
-            @if(IsTotal)
+            @if (IsTotal)
             {
                 @("Total")
             }
@@ -26,11 +26,23 @@
         </MudText>
     </MudStack>
 
-    <MudDivider Class="mt-2 mb-3"/>
+    <MudDivider Class="mt-2 mb-3" />
 
-    <MudText Typo="Typo.body2">
-        @Title
-    </MudText>
+    @if (IsStateCard && !IsConnected && !IsServiceTrying)
+    {
+        <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2" NoIcon="false" Variant="Variant.Text">
+            <MudText Typo="Typo.caption">
+                <strong>Não conectado!</strong><br />
+                Clique no ícone acima para iniciar a conexão e monitorar os ramais.
+            </MudText>
+        </MudAlert>
+    }
+    else
+    {
+        <MudText Typo="Typo.body2">
+            @Title
+        </MudText>
+    }
 </MudPaper>
 
 @code {
@@ -59,7 +71,33 @@
     public int MaxButtons { get; set; }
 
     [Parameter]
+    public bool IsConnected { get; set; }
+
+    [Parameter]
     public EventCallback OnClick { get; set; }
+
+    private string GetIconClass()
+    {
+        var baseClass = "d-flex align-center mt-n5 pa-3 cursor-pointer";
+
+        if (IsStateCard)
+        {
+            if (IsServiceTrying)
+            {
+                return $"{baseClass} mud-theme-info";
+            }
+            else if (!IsConnected)
+            {
+                return $"{baseClass} mud-theme-warning";
+            }
+            else
+            {
+                return $"{baseClass} mud-theme-success";
+            }
+        }
+
+        return $"{baseClass} mud-theme-dark";
+    }
 
     private async Task Click()
     {
