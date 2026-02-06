@@ -17,15 +17,14 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
         [Parameter]
         public uint? Total { get; set; }
-        /*
-        private async void PaggingSelectChanged(SelectedChangedEventArgs<string?> e)
+
+        private async Task PaggingSelectChanged(uint pageSize)
         {
-            if (uint.TryParse(e.Current, out uint pagesize))
+            if (Pagging != null)
             {
-                PaggingContext.Monitor?.SetPageSize(pagesize);
+                Pagging.SetPageSize(pageSize);
                 await InvokeAsync(StateHasChanged);
             }
         }
-        */
     }
 }

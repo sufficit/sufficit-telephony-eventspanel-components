@@ -1,30 +1,31 @@
 ﻿<div class="row mt-2">
     <div class="col-lg-4 col-md-6 col-12">
         <div class="d-flex align-items-center position-relative">
-        <div class="mb-1">
-                <Select style="border: none;" OnChanged="PaggingSelectChanged">
-                <!--<Option Value=0 Label="Ilimitado"></Option>-->
-                <Option Label=20 Default="true"></Option>
-                <Option Label=50></Option>
-                <Option Label=100></Option>
-                <Option Label=200></Option>
-            </Select>
+            <div class="mb-1">
+                <MudSelect T="uint" 
+                          Value="@(Pagging?.PageSize ?? 20)" 
+                          ValueChanged="PaggingSelectChanged"
+                          Variant="Variant.Outlined"
+                          Dense="true"
+                          Style="border: none;">
+                    <MudSelectItem T="uint" Value="20">20</MudSelectItem>
+                    <MudSelectItem T="uint" Value="50">50</MudSelectItem>
+                    <MudSelectItem T="uint" Value="100">100</MudSelectItem>
+                    <MudSelectItem T="uint" Value="200">200</MudSelectItem>
+                </MudSelect>
+            </div>
+            <p class="opacity-8 mb-1 ms-3">Itens por página</p>
+            <hr class="vertical light mt-0">
         </div>
-        <p class="opacity-8 mb-1 ms-3">Itens por página</p>
-        <hr class="vertical light mt-0">
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6 col-12" disabled>        
-        <DataPagging Monitor="@Pagging"></DataPagging>
     </div>
     <div class="col-lg-4 col-md-6 col-12 ms-lg-auto text-center">
         <div class="d-flex align-items-center position-relative">
-        <p class="opacity-8 mb-1 ms-3 me-auto">
-            Exibindo <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging.PageStart +1)</span> até <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging.GetPageEnd())</span>
-            <span> de </span><span class="h6 mb-1 ms-lg-auto ms-0">@Pagging.PageTotalItems</span>            
-            Resultados
-        </p>
-        <hr class="vertical light mt-0">
+            <p class="opacity-8 mb-1 ms-3 me-auto">
+                Exibindo <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging?.PageStart + 1 ?? 0)</span> até <span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging?.GetPageEnd() ?? 0)</span>
+                <span> de </span><span class="h6 mb-1 ms-lg-auto ms-0">@(Pagging?.PageTotalItems ?? 0)</span>            
+                Resultados
+            </p>
+            <hr class="vertical light mt-0">
         </div>
     </div>
 </div>

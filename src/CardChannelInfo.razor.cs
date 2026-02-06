@@ -172,7 +172,7 @@ namespace Sufficit.Telephony.EventsPanel.Components
 
 
 
-        protected bool IsCalling => Content?.Hangup == null && Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;
+        //protected bool IsCalling => Content?.Hangup == null && Content.State is AsteriskChannelState.Up or AsteriskChannelState.Ringing or AsteriskChannelState.Ring or AsteriskChannelState.Dialing or AsteriskChannelState.Busy or AsteriskChannelState.DialingOffhook or AsteriskChannelState.OffHook or AsteriskChannelState.PreRing;
 
         /// <summary>
         /// Gets the icon color based on channel state
