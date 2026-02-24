@@ -42,7 +42,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
         public void Dispose()
         {
             IsRendered = false;
-            Console.WriteLine($"disposing card, for: {Card.Monitor?.Key}");
 
             if (Card.Monitor != null)            
                 Card.Monitor.OnChanged -= OnMonitorChanged;            
@@ -66,7 +65,6 @@ namespace Sufficit.Telephony.EventsPanel.Components
         {
             if (IsRendered)
             {
-                Console.WriteLine($"event received: {state}, for: {Card.Monitor?.Key}");
                 await InvokeAsync(StateHasChanged);
             }
         }
