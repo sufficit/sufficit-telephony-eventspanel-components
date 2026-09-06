@@ -4,3 +4,5 @@ src/bin/
 *.backup
 src/.vs/
 .vs/
+# Worktrees (padrao): arvores de trabalho em <repo>/.worktrees/
+**/.worktrees/
